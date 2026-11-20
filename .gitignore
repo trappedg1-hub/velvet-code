@@ -1,0 +1,21 @@
+# кэши и окружение
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+.ruff_cache/
+node_modules/
+
+# рантайм турниров (пересоздаётся командой arena_loop init)
+.arena/
+
+# промежуточные рендеры на хромакее — восстанавливаются из renders_v11.jsonl
+assets/raw/
+
+# сгенерированные отчёты на утверждение — пересобираются python3 automation/review.py
+review/*.html
+
+# системный мусор
+.DS_Store
+Thumbs.db
+*.log

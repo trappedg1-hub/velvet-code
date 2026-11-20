@@ -1,0 +1,48 @@
+name: ci
+
+on:
+  push: { branches: [main] }
+  pull_request:
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.13" }
+      - name: deps
+        run: pip install pytest pillow numpy
+      - name: tests
+        run: python3 -m pytest tests -q
+      - name: canon gate
+        # утверждённый канон не должен расходиться с данными
+        run: python3 -m automation.canon check
+      - name: review artifact builds
+        run: python3 -m automation.canon render
+      - name: prototype js syntax
+        run: |
+          python3 - <<'PY'
+          import re, pathlib, subprocess, tempfile, sys
+          html = pathlib.Path("prototype/index.html").read_text(encoding="utf-8")
+          js = re.findall(r"<script>(.*?)</script>", html, re.S)[-1]
+          f = pathlib.Path(tempfile.mkstemp(suffix=".js")[1]); f.write_text(js)
+          sys.exit(subprocess.call(["node", "--check", str(f)]))
+          PY
+      - name: content schema sanity
+        run: |
+          python3 - <<'PY'
+          import json, pathlib, sys
+          need = {"id","name","full","age","sprite","zones","moodLines","react","replies","skins"}
+          bad = []
+          for p in pathlib.Path("content/characters").glob("*.json"):
+              d = json.loads(p.read_text(encoding="utf-8"))
+              miss = need - set(d)
+              if miss: bad.append(f"{p.name}: нет {sorted(miss)}")
+              if d.get("age", 0) < 18: bad.append(f"{p.name}: возраст < 18")
+              if len(d.get("zones", [])) < 6: bad.append(f"{p.name}: мало зон")
+          print("\n".join(bad) or "content ok")
+          sys.exit(1 if bad else 0)
+          PY
+      - uses: actions/upload-artifact@v4
+        with: { name: canon-review, path: review/canon-v1.html }

@@ -1,0 +1,1570 @@
+{
+  "pack": "style-v8",
+  "note": "v8: владелец выбрал регистр B (manhwa-color) — он стал дефолтом, весь каст из 7 героинь пересобран в этом регистре и прошёл оба гейта. Зафиксирован баг пайплайна, стиравший манифест.",
+  "items": [
+    {
+      "id": "decisions-2026-11-20",
+      "kind": "logic",
+      "title": "Решения владельца (20.11.2026)",
+      "data": {
+        "style": "more_body — ещё длиннее ноги, шире бёдра, агрессивнее S-линия и ракурсы",
+        "cast": "more_ntr — состав сдвинут в сторону давления: чужая девушка, бывшая, сестра партнёра",
+        "spice": "l2plus — больше кожи и провокации, остаётся в рамках одежды, на грани",
+        "tension": "harder — давление выше, окна короче, провал больнее",
+        "applied": "стиль пересчитан (style-core v2), состав расширен до 7 (cast-v2), политика обновлена (spice-policy v2), двигатель напряжения ужесточён (tension-engine v2)"
+      }
+    },
+    {
+      "id": "decisions-2026-11-20-bodies",
+      "kind": "logic",
+      "title": "Решение владельца: объёмные фан-сервисные фигуры (20.11.2026, повторно)",
+      "data": {
+        "verdict": "канон v2 НЕ утверждён: «не нравятся фигуры кроме девушки в серебристом платье»",
+        "directive": "фигуры должны быть более фан-сервисными, более объёмные формы",
+        "style_source": "копировать стиль топовой манхвы; аниме-стиль допустим как примесь",
+        "genres_studied": "ecchi + hentai (визуальный канон объёма и рендера)",
+        "applied": "7 новых рендеров переделаны под curvy-спеку; канон переписан в v3 (style-core v3, tag-vocab v3, cast-v3, prompt-stack)",
+        "accepted_reference": "Селена в серебристом платье (assets/sprite/selena_v2.webp) — сохранена как есть, эталон принятой фигуры",
+        "rejected_axes": [
+          "8.0–8.6 голов",
+          "leg ratio 0.56–0.59",
+          "модельная вытянутая худоба",
+          "тонкие ноги при широких бёдрах"
+        ]
+      }
+    },
+    {
+      "id": "decisions-2026-11-20-figures",
+      "kind": "logic",
+      "title": "Решение владельца: разные фигуры, личные фишки, фут-акцент через позу (20.11.2026)",
+      "data": {
+        "verdict_v3": "канон v3 НЕ утверждён: «все фигуры выглядят гипертрофированно»",
+        "directive": [
+          "гипертрофию оставить только для категории MILF",
+          "сделать фигуры РАЗНЫМИ, у каждой своя фишка",
+          "фут-фетиш раскрывать позами, акцент должен быть, но не везде"
+        ],
+        "research_done": [
+          "типажи манхвы/манги и ecchi/hentai",
+          "NTR-типология A/B/C/D, netori/netorase/BSS",
+          "боро-теги фигур и стоп с частотами",
+          "промпт-инженерия GitHub + правила Anima/NoobAI/Illustrious/Pony",
+          "инструменты производства игры: pixi-vn, rig-c, Rigby2D, Ren'Py, Spine"
+        ],
+        "applied": "style-core v4, body-taxonomy, tag-vocab v4 (+стопы, +правила Anima), cast-v4, prompt-stack v4, tools-stack, 4 новых wildcard-файла"
+      }
+    },
+    {
+      "id": "decisions-2026-11-20-figures-v5",
+      "kind": "logic",
+      "title": "Решение владельца v5: убрать «толстушек» и пацанку, добавить темперамент и лечение артефактов",
+      "data": {
+        "rejected": [
+          "soft/plump фигура (мягкий живот)",
+          "пацанка с короткой стрижкой"
+        ],
+        "directive": [
+          "фигуры разные и без плюс-сайз",
+          "у каждой свой темперамент: фетиши, демоны, скелеты в шкафу",
+          "найти инструменты против артефактов",
+          "максимальный ресёрч о привлекательности и привести в порядок"
+        ],
+        "replaced": {
+          "mika": "soft/plump → curvy secretary (нормальный вес, WHR 0.70, без живота)",
+          "nova": "tomboy/короткая стрижка → gyaru (загар, длинные волосы)"
+        },
+        "research": [
+          "процент жира как главный предиктор (R²=0.76)",
+          "WHR 0.70 и приоритет curviness",
+          "поясничный прогиб 45.5° и ракурсы",
+          "hip sway +50%",
+          "неотения лица во взрослой структуре",
+          "ADetailer/FaceDetailer/Flux Fill + pyiqa"
+        ],
+        "applied": "style-core v5, body-taxonomy v5, attraction-science, temperament-matrix, tag-vocab v5, cast-v5, artifact-stack, prompt-stack v5, tools-stack v5"
+      }
+    },
+    {
+      "id": "body-taxonomy",
+      "kind": "style",
+      "title": "Таксономия фигур v5 (7 силуэтов, без «толстушек» и без пацанки)",
+      "data": {
+        "rule": "Фигура = часть личности. Гипертрофия только у MILF. Мягкий живот и «плюс-сайз» исключены: процент жира — сильнейший предиктор воспринимаемой привлекательности, зависимость отрицательная до BMI 19. Короткая стрижка/пацанка исключена решением владельца.",
+        "booru_source": "Danbooru: curvy / petite / shortstack / pear-shaped figure / muscular female / gyaru; частоты: wide hips 59k, petite 31k, shortstack 6.7k, pear-shaped 3.9k",
+        "figure_set": [
+          {
+            "id": "selena",
+            "type": "tall glamour",
+            "who": "Селена",
+            "heads": "8.2",
+            "bust": "large",
+            "silhouette": "стройная база, длинные ноги, WHR 0.70, поясничный прогиб",
+            "allowed": "tall, slim waist, large breasts, long legs, elegant",
+            "why": "журнальная база + узкая талия: работает на контрасте с каблуком"
+          },
+          {
+            "id": "reika",
+            "type": "MILF (гипертрофия разрешена)",
+            "who": "Рэйка",
+            "heads": "7.7",
+            "bust": "gigantic",
+            "silhouette": "максимальный объём, тяжёлые бёдра, зрелая посадка",
+            "allowed": "milf, curvy, gigantic breasts, wide hips, thick thighs, mature female",
+            "why": "единственная точка, где объём намеренно за пределом нормы"
+          },
+          {
+            "id": "yuna",
+            "type": "petite + pear-shaped",
+            "who": "Юна",
+            "heads": "7.2",
+            "bust": "small–medium",
+            "silhouette": "низкая, бёдра шире груди, полные бёдра при узкой талии",
+            "allowed": "petite, pear-shaped figure, wide hips, thick thighs, small breasts",
+            "why": "контраст роста и объёма — самый читаемый силуэт в линейке"
+          },
+          {
+            "id": "irene",
+            "type": "athletic",
+            "who": "Айрин",
+            "heads": "7.9",
+            "bust": "medium",
+            "silhouette": "рельеф, сильные бёдра, распрямлённая спина, низкий процент жира",
+            "allowed": "muscular female, toned, abs, medium breasts, athletic",
+            "why": "мышцы вместо объёма: другая физика привлекательности"
+          },
+          {
+            "id": "sora",
+            "type": "shortstack",
+            "who": "Сора",
+            "heads": "7.0",
+            "bust": "large",
+            "silhouette": "низкая и плотная, объём при малом росте",
+            "allowed": "shortstack, short, curvy, dense, large breasts",
+            "why": "эффект масштаба: то же тело на 160 см читается иначе"
+          },
+          {
+            "id": "mika",
+            "type": "curvy secretary (нормальный вес)",
+            "who": "Мика",
+            "heads": "7.6",
+            "bust": "medium–large",
+            "silhouette": "узкая талия, WHR 0.70, полная грудь, округлые бёдра, БЕЗ живота",
+            "allowed": "curvy, narrow waist, medium-large breasts, rounded hips, slim thighs, office lady",
+            "why": "объём за счёт формы, не за счёт жира: BF% — главный предиктор привлекательности"
+          },
+          {
+            "id": "nova",
+            "type": "gyaru",
+            "who": "Нова",
+            "heads": "8.0",
+            "bust": "medium",
+            "silhouette": "высокая, тонкая в талии, загорелая, длинные волосы, качающая бёдрами",
+            "allowed": "gyaru, tan skin, long blonde hair, belly chain, slim waist, medium breasts",
+            "why": "самый фетишизированный типаж манги: загар, длинные волосы, наглый взгляд"
+          }
+        ],
+        "checks": [
+          "силуэты не сливаются рядом: разные высоты 158–181 и разные крайние точки",
+          "у каждой WHR ≈ 0.70, но объём разный — различие в распределении, а не в весе",
+          "поясничный прогиб читается в каждой позе",
+          "MILF-гипертрофия не переносится на остальных",
+          "в негативе всегда: plump, soft belly, chubby, short hair (для gyaru — long hair обязательны)"
+        ]
+      }
+    },
+    {
+      "id": "attraction-science",
+      "kind": "style",
+      "title": "Наука привлекательности: что реально работает (с цифрами)",
+      "data": {
+        "why": "вкус владельца совпал с исследованиями: объём без жира, узкая талия, прогиб, бёдра. Это не мнение, это повторяемые эффекты.",
+        "waist_hip": {
+          "value": "WHR ≈ 0.70",
+          "source": "Singh 1993 + множество репликаций; 2024 Scientific Reports (Hübner & Ufken): curviness важнее WHR, особенно при большой ширине тела",
+          "note": "UNSW 2015: на силуэтах решает абсолютная узость талии, а не только отношение"
+        },
+        "body_fat": {
+          "value": "BF% — сильнейший предиктор: R²=0.76, отрицательная связь вплоть до BMI 19",
+          "source": "The role of body fat in female attractiveness (DEXA-стимулы)",
+          "note": "отсюда запрет на мягкий живот; «плюс-сайз» = сознательный отказ от привлекательности"
+        },
+        "lumbar_curvature": {
+          "value": "оптимум ≈ 45.5°",
+          "source": "Lewis et al. 2015; Pazhoohi et al. 2018 (айтрекинг)",
+          "note": "прогиб повышает оценку и уводит взгляд на бёдра; сильнее всего читается с БОКОВЫХ и ЗАДНИХ ракурсов; каблуки создают этот прогиб механически"
+        },
+        "gait": {
+          "value": "покачивание бёдрами +≈50% к оценке привлекательности",
+          "source": "Johnson & Tassinary 2007 (PNAS)",
+          "note": "любая «идущая» поза строится с hip sway"
+        },
+        "face": {
+          "value": "неотения (крупные глаза, маленький нос, полные губы, короткий подбородок) + женственность формы; жирность лица — минус",
+          "source": "Jones 1993; Cunningham; Furnham & Reeves 2006",
+          "note": "взрослая структура (скулы, челюсть) обязательна — иначе уходим в детскость, что запрещено"
+        },
+        "applied_rules": [
+          "WHR 0.70 во всех силуэтах, но объём разный",
+          "прогиб в пояснице в КАЖДОЙ позе; камера по умолчанию 3/4 или сзади",
+          "идущая поза = hip sway",
+          "никакого мягкого живота: живот плоский даже у «curvy»",
+          "лицо: неотения внутри взрослой структуры",
+          "высокий каблук — не декор, а инструмент прогиба"
+        ]
+      }
+    },
+    {
+      "id": "temperament-matrix",
+      "kind": "character",
+      "title": "Темперамент и изнанка: у каждой свой фетиш, свой демон, свой скелет",
+      "data": {
+        "principle": "Темперамент — не «характер в двух словах», а набор: личный фетиш, внутренний демон, скелет в шкафу, триггер и признак, по которому видно, что она уже сдалась.",
+        "rule": "ни один фетиш не повторяется дважды; каждый демон — продолжение её архетипа; скелет всегда объясняет, почему она делает то, что делает",
+        "heroines": [
+          {
+            "id": "selena",
+            "name": "Селена",
+            "core": "Холодная витрина. Контролирует каждый кадр и не умеет быть никем, когда камера выключена.",
+            "fetish": "чужие руки на её обуви: снять туфлю позволяет только тому, кто не смотрит в объектив",
+            "demon": "страх быть невыбранной. Лейбл давно сделал её товаром, и она не знает, любят её или её образ",
+            "skeleton": "подписала контракт, где её тело — актив; одна съёмка была «закрытой», и она до сих пор не говорит, что там было",
+            "trigger": "полная тишина и отсутствие свидетелей; приказ, сказанный очень тихо",
+            "tell": "перестаёт поправлять волосы и смотрит в глаза вместо объектива"
+          },
+          {
+            "id": "reika",
+            "name": "Рэйка",
+            "core": "Всё под контролем. Дом ведёт как проект, мужа — как функцию.",
+            "fetish": "быть застигнутой: её заводит не процесс, а риск",
+            "demon": "скука. Она не боится греха — она боится вторника",
+            "skeleton": "у неё был роман, из которого она вышла без потерь; с тех пор считает, что последствия — для других",
+            "trigger": "когда ей говорят «нет» — вежливо и твёрдо",
+            "tell": "начинает снимать кольцо, будто оно мешает"
+          },
+          {
+            "id": "yuna",
+            "name": "Юна",
+            "core": "Дерзкая, но ей важно, чтобы выбрали именно её — не «лучшую», а её.",
+            "fetish": "чтобы её желали на глазах у того, кто считает её своей",
+            "demon": "быть второй. Она способна на всё, кроме роли «подруги главного»",
+            "skeleton": "она уже один раз «увела» — и до сих пор не знает, было ли это победой",
+            "trigger": "прямой вызов при свидетелях",
+            "tell": "перестаёт улыбаться и говорит тише — это опасный признак"
+          },
+          {
+            "id": "irene",
+            "name": "Айрин",
+            "core": "Тело как инструмент. Эмоции — тоже мышца, которую она тренирует.",
+            "fetish": "контроль над собственным телом и момент, когда он ломается",
+            "demon": "травма, закончившая карьеру; она не простила не тренера, а себя",
+            "skeleton": "ушла из спорта не из-за колена: один раз поддалась, и это видели",
+            "trigger": "соревнование, где она не фаворит",
+            "tell": "снимает обувь — значит, решила остаться"
+          },
+          {
+            "id": "sora",
+            "name": "Сора",
+            "core": "Младшая, которую все считают ребёнком, — и она научилась этим пользоваться.",
+            "fetish": "чтобы её перестали считать «маленькой»",
+            "demon": "её никогда не выбирают первой: она всегда «сестра того парня»",
+            "skeleton": "она знает о тебе больше, чем ты о ней, и хранит это как козырь",
+            "trigger": "когда с ней говорят как со взрослой, без скидки",
+            "tell": "перестаёт прятать руки за спину"
+          },
+          {
+            "id": "mika",
+            "name": "Мика",
+            "core": "Тихая, точная, знает всё. И это её оружие.",
+            "fetish": "чтобы её заметили не как «удобную», а как опасную",
+            "demon": "она двадцать раз промолчала и каждый раз ненавидела себя за это",
+            "skeleton": "ведёт архив, где есть всё про всех — включая то, что ты хотел бы забыть",
+            "trigger": "когда кто-то зависит от её молчания",
+            "tell": "снимает очки"
+          },
+          {
+            "id": "nova",
+            "name": "Нова",
+            "core": "Громкая и яркая, плевать на правила. Единственная, кто говорит правду.",
+            "fetish": "чтобы её хотели, не пытаясь приручить",
+            "demon": "боится, что за громкостью ничего нет",
+            "skeleton": "уже была «трофеем» и знает, как это выглядит изнутри",
+            "trigger": "тот, кто не пытается её переделать",
+            "tell": "перестаёт смеяться"
+          }
+        ]
+      }
+    },
+    {
+      "id": "style-core",
+      "kind": "style",
+      "title": "Ядро визуального стиля v5 (фигуры без жира + прогиб)",
+      "data": {
+        "lineage": "топовая корейская манхва / webtoon-drama как база (70%), аниме-регистр как примешиваемый слой (30%)",
+        "body_emphasis": "РЕШЕНИЕ 20.11.2026 (четвёртая итерация): фигуры РАЗНЫЕ и БЕЗ «плюс-сайз». Гипертрофия — только MILF. Мягкий живот исключён: BF% — главный предиктор привлекательности. Пацанка с короткой стрижкой заменена на gyaru.",
+        "proportions": {
+          "heads_per_body": "7.0–8.2 по типу фигуры",
+          "waist_hip": "WHR ≈ 0.70 во всех силуэтах, различие — в распределении объёма, не в весе",
+          "body_fat": "визуально 19–21% BF: плоский живот, нет «мягких» зон",
+          "lumbar": "поясничный прогиб ≈ 45.5° в каждой позе; каблук — инструмент прогиба",
+          "bust": "small (нет такой) → medium (Айрин, Нова) → large (Селена, Сора) → medium-large (Мика) → gigantic (Рэйка, только MILF)",
+          "hips": "широкие у pear/shortstack/MILF; округлые у secretary; узкие у athletic/gyaru",
+          "face": "неотения внутри взрослой структуры: крупные глаза, полные губы, маленький нос — при выраженных скулах и челюсти",
+          "guard": "объём даётся ФОРМОЙ; мягкий живот, оплывшая талия и «пацанская» стрижка запрещены"
+        },
+        "ecchi_render": {
+          "skin": "глянцевые specular-блики по кривизне (плечо, грудь, бедро, колено), подповерхностное рассеивание",
+          "blush": "градиентный румянец + штриховка blush-линий у скул",
+          "fabric": "полупрозрачная/влажная ткань, натяжение на груди и бёдрах, visible underboob / sideboob там, где позволяет костюм",
+          "focus": "акцентная триада: грудь → бёдра → стопы/обувь",
+          "camera": "низкий ракурс (from below), камера на уровне бёдер, лёгкий наклон",
+          "secondary_motion": "микро-колебание бедра и груди — закладывается в позу и в риг"
+        },
+        "lineart": {
+          "weight": "толстый контур силуэта (2–3 px), тонкий внутренний (1 px)",
+          "character": "чистая цифровая линия манхвы, без «карандашной» шершавости",
+          "rule": "силуэт обязан работать как иконка"
+        },
+        "shading": {
+          "base": "мягкий cel-shading 2–3 тона + ручная доводка градиентом",
+          "specular": "глянцевые блики: губы, скулы, грудь, колено, плечо, лак обуви",
+          "fabric": "складки и натяжение — 30% «дорогого» вида",
+          "skin": "тёплый подтон, холодные фиолетово-розовые тени, без серости"
+        },
+        "color": {
+          "palette": "приглушённый кинематографичный фон + 1–2 акцентных цвета на персонажа",
+          "contrast": "высокий контраст на лице, груди, бёдрах и обуви; низкий — на фоне",
+          "per_heroine": "Селена #ff6fa5 · Мика #ffb36b · Рэйка #c4557a · Нова #5eead4 · Юна #ff7a59 · Айрин #e2c878 · Сора #8ec5ff"
+        },
+        "lighting": {
+          "scheme": "ведущая + контровой rim light, тёплый ключевой / холодный контровой",
+          "mood": "вечерний клубный свет: неон, дымка, блики на ткани",
+          "forbidden": "плоский «стоковый» свет без направления"
+        },
+        "framing_guard": {
+          "rule": "персонаж занимает ≤80% высоты кадра; над волосами и под обувью остаётся зазор",
+          "why": "обрез обуви/волос по краю кадра — брак спрайта (в стопах ключевая тема проекта)",
+          "qa": "tools/qa_sprites.py проверяет альфу по краю ДО трима; спрайт с касанием края не принимается",
+          "background": "плоский chroma-key #00FF00, без теней и реквизита"
+        },
+        "quality_prefix": "masterpiece, best quality, manhwa style, (figure per character:1.2), glossy skin, thick lineart, detailed fabric folds, cinematic rim light, low angle",
+        "negative": "lowres, worst quality, bad anatomy, bad hands, extra digits, fused fingers, deformed feet, broken heel, cropped feet, cropped head, cropped hands, plump, chubby, soft belly, thick waist, short hair, same face syndrome, identical body types, watermark, signature, text, flat lighting, child-like proportions, chibi",
+        "hard_rules": [
+          "все персонажи взрослые (18+), взрослая структура лица",
+          "полный рост head-to-toe, обувь целиком в кадре, кисти не на краю кадра",
+          "фигуры разные; гипертрофия только у MILF",
+          "мягкий живот / плюс-сайз запрещены",
+          "прогиб в пояснице и поза-скелет обязательны",
+          "стопа проработана всегда",
+          "фон не протекает в силуэт",
+          "прогиб, кадр и артефакты проверяются автоматически (make qa / make qa-render)"
+        ],
+        "title": null,
+        "foot_focus": {
+          "principle": "фут-фетиш раскрывается ПОЗОЙ и кадром, а не тегом «feet» на каждой картинке. Акцент есть у 5 из 7, но максимальный — у двух.",
+          "levels": {
+            "3": "поза целиком построена вокруг стопы (Селена, Айрин)",
+            "2": "стопа читается, но не главная (Юна, Мика)",
+            "1": "стопа в кадре без акцента (Сора, Нова, Рэйка)"
+          },
+          "booru_tags": [
+            "foot_focus",
+            "soles",
+            "toes",
+            "presenting foot",
+            "presenting own foot",
+            "shoe dangle",
+            "heel pop",
+            "toe scrunch",
+            "crossed ankles",
+            "tiptoes",
+            "plantar flexion",
+            "dorsiflexion",
+            "arched soles",
+            "footwear focus",
+            "stiletto heels",
+            "strappy heels",
+            "toe cleavage",
+            "anklet",
+            "toenail polish"
+          ],
+          "salience": "бори-консенсус: вид снизу на стопу — самая высокая заметность; сильнее всего читается ПОДОШВА, затем профиль, затем подъём",
+          "framing": "камера на уровне пола / колена; стопа ближе к объективу, перспектива работает на неё",
+          "note": "каблук перестал быть просто обувью: он механически создаёт прогиб, который и есть главный сигнал привлекательности"
+        }
+      }
+    },
+    {
+      "id": "tag-vocab",
+      "kind": "style",
+      "title": "Словарь тегов v5 (gyaru, привлекательность, запреты)",
+      "data": {
+        "body_curvy": [
+          "curvy",
+          "voluptuous",
+          "huge breasts",
+          "wide hips",
+          "thick thighs",
+          "narrow waist",
+          "hourglass figure",
+          "mature female",
+          "glossy skin",
+          "blush gradient",
+          "translucent fabric",
+          "underboob",
+          "low angle"
+        ],
+        "bust_ladder": [
+          "flat",
+          "small",
+          "medium",
+          "large",
+          "huge (≥ головы)",
+          "gigantic (>2× головы)"
+        ],
+        "aliases": {
+          "curvy": "curvaceous / voluptuous",
+          "thick thighs": "big_thighs / huge_thighs / thunder_thighs",
+          "wide hips": "широкие бёдра, бёдра шире плеч",
+          "hourglass": "hourglass figure, narrow waist"
+        },
+        "pose": [
+          "contrapposto",
+          "hand on hip",
+          "weight on one leg",
+          "legs crossed",
+          "arched back",
+          "leaning forward",
+          "knee bent",
+          "hips tilted"
+        ],
+        "camera": [
+          "full body",
+          "from below",
+          "low angle",
+          "from side",
+          "dutch angle",
+          "footwear focus",
+          "cowboy shot",
+          "close-up",
+          "depth of field"
+        ],
+        "outfit_l2plus": [
+          "bodycon mini dress",
+          "open back dress",
+          "high side slit",
+          "leather mini skirt",
+          "bandeau top",
+          "knotted tee",
+          "underwear as outerwear",
+          "garter straps visible",
+          "patterned sheer tights",
+          "thighhighs",
+          "ankle-strap stiletto heels",
+          "platform boots",
+          "sheer pantyhose"
+        ],
+        "style": [
+          "manhwa style",
+          "webtoon",
+          "thick lineart",
+          "glossy highlights",
+          "detailed fabric folds",
+          "soft cel shading",
+          "cinematic rim light",
+          "neon accent light"
+        ],
+        "weights": {
+          "rule": "вес тега (tag:1.2), рабочий диапазон 0.7–1.5; за пределами силуэт ломается",
+          "priority": "объём тела 1.25–1.4 · костюм 1.1–1.2 · камера 1.0–1.15"
+        },
+        "rule": "сцена = скелет-поза (ControlNet) + теги ФИГУРЫ героини + костюм + камера. Прогиб и наклон таза задаются скелетом.",
+        "body_by_figure": {
+          "selena": [
+            "tall",
+            "slim waist",
+            "large breasts",
+            "long legs",
+            "elegant"
+          ],
+          "reika": [
+            "milf",
+            "curvy",
+            "gigantic breasts",
+            "wide hips",
+            "thick thighs",
+            "mature female"
+          ],
+          "yuna": [
+            "petite",
+            "pear-shaped figure",
+            "wide hips",
+            "thick thighs",
+            "small breasts"
+          ],
+          "irene": [
+            "muscular female",
+            "toned",
+            "abs",
+            "medium breasts",
+            "athletic"
+          ],
+          "sora": [
+            "shortstack",
+            "short",
+            "curvy",
+            "dense",
+            "large breasts"
+          ],
+          "mika": [
+            "curvy",
+            "narrow waist",
+            "medium-large breasts",
+            "rounded hips",
+            "slim thighs",
+            "office lady"
+          ],
+          "nova": [
+            "gyaru",
+            "tan skin",
+            "long blonde hair",
+            "belly chain",
+            "slim waist",
+            "medium breasts"
+          ]
+        },
+        "feet_and_legs": {
+          "focus": [
+            "foot_focus",
+            "footwear focus",
+            "leg focus",
+            "lower body"
+          ],
+          "presentation": [
+            "presenting foot",
+            "presenting own foot",
+            "soles",
+            "toes",
+            "arched soles",
+            "spread toes"
+          ],
+          "motion": [
+            "tiptoes",
+            "toe scrunch",
+            "heel pop",
+            "shoe dangle",
+            "foot dangle",
+            "dorsiflexion",
+            "plantar flexion",
+            "crossed ankles",
+            "feet up"
+          ],
+          "footwear": [
+            "stiletto heels",
+            "strappy heels",
+            "ankle-strap heels",
+            "platform boots",
+            "block heels",
+            "sneakers",
+            "loafers",
+            "backless loafers"
+          ],
+          "legwear": [
+            "sheer black pantyhose",
+            "patterned sheer tights",
+            "fishnet",
+            "thighhighs",
+            "toeless legwear",
+            "stirrup legwear"
+          ],
+          "detail": [
+            "toenail polish",
+            "anklet",
+            "toe cleavage",
+            "ankle strap",
+            "heel"
+          ],
+          "note": "feet и toes считаются даже в чулках/сандалиях; обувь закрывает — тогда footwear focus"
+        },
+        "anima_model_rules": {
+          "tag_format": "нижний регистр с ПРОБЕЛАМИ, не подчёркиваниями; score_7 — исключение",
+          "spelling": "где Danbooru и Gelbooru расходятся — брать написание Gelbooru",
+          "artists": "артист-теги через @ (иначе эффект почти нулевой)",
+          "weights": "веса работают, но нужен больший множитель, чем в SDXL: (tag:2), а не (tag:1.2)",
+          "style": "гибрид тегов + естественного языка даёт лучший результат; tag dropout встроен — не перечислять всё",
+          "source": "circlestone-labs/Anima prompt guide + подтверждение весов в обсуждении модели"
+        },
+        "gyaru": {
+          "tags": [
+            "gyaru",
+            "tan skin",
+            "long blonde hair",
+            "pink hair tips",
+            "long nails",
+            "hoop earrings",
+            "belly chain",
+            "midriff",
+            "makeup"
+          ],
+          "substyles": [
+            "kogyaru",
+            "ganguro",
+            "harem/ hime gyaru"
+          ],
+          "note": "ключевое отличие от «просто блондинки»: загар + длинные волосы + макияж + наглый взгляд"
+        },
+        "attraction": {
+          "waist": "narrow waist",
+          "posture": [
+            "arched back",
+            "lower back curve",
+            "pelvis tilted",
+            "hip sway"
+          ],
+          "face": [
+            "large eyes",
+            "full lips",
+            "defined cheekbones",
+            "feminine facial structure"
+          ],
+          "forbidden": [
+            "plump",
+            "soft belly",
+            "chubby",
+            "short hair"
+          ]
+        },
+        "db": "assets/tags/*.csv + tools/tag_db.py (частоты реальные, см. tag-db)"
+      }
+    },
+    {
+      "id": "cast-v5",
+      "kind": "character",
+      "title": "Состав v5 (7 фигур без «плюс-сайз», у каждой темперамент)",
+      "data": {
+        "principle": "фигура, фетиш и демон — три разных слоя одной героини. Ни один фетиш не повторяется.",
+        "waves": {
+          "wave1": [
+            "selena",
+            "reika",
+            "yuna",
+            "irene",
+            "sora"
+          ],
+          "wave2": [
+            "mika",
+            "nova"
+          ]
+        },
+        "figures_summary": "tall glamour · MILF · petite-pear · athletic · shortstack · curvy secretary · gyaru",
+        "heroines": [
+          {
+            "id": "selena",
+            "name": "Селена",
+            "figure": "tall glamour",
+            "figure_tags": [
+              "tall",
+              "slim waist",
+              "large breasts",
+              "long legs",
+              "elegant"
+            ],
+            "heads": "8.2",
+            "bust": "large",
+            "silhouette": "стройная база, длинные ноги, WHR 0.70, поясничный прогиб",
+            "why_this_figure": "журнальная база + узкая талия: работает на контрасте с каблуком",
+            "feet_focus_level": 3,
+            "ntr_role": "давление публичности (вне NTR-ядра)",
+            "pose_prompt": "sitting on a high stool, legs crossed, one stiletto dangling from her toes, sole presented toward the camera",
+            "outfit": "облегающее чёрное off-shoulder платье-бодикон с высоким разрезом, плотные чёрные колготки, босоножки на ремешке",
+            "sprite": "assets/sprite/selena.webp"
+          },
+          {
+            "id": "reika",
+            "name": "Рэйка",
+            "figure": "MILF (гипертрофия разрешена)",
+            "figure_tags": [
+              "milf",
+              "curvy",
+              "gigantic breasts",
+              "wide hips",
+              "thick thighs",
+              "mature female"
+            ],
+            "heads": "7.7",
+            "bust": "gigantic",
+            "silhouette": "максимальный объём, тяжёлые бёдра, зрелая посадка",
+            "why_this_figure": "единственная точка, где объём намеренно за пределом нормы",
+            "feet_focus_level": 1,
+            "ntr_role": "NTR тип B — муж вернётся, но поздно",
+            "pose_prompt": "standing, arms crossed under the bust, heels together, lower back arched, looking down at the viewer",
+            "outfit": "винное облегающее платье-водолазка крупной вязки, тёмно-серые плотные колготки, ботильоны, золото",
+            "sprite": "assets/sprite/reika.webp"
+          },
+          {
+            "id": "yuna",
+            "name": "Юна",
+            "figure": "petite + pear-shaped",
+            "figure_tags": [
+              "petite",
+              "pear-shaped figure",
+              "wide hips",
+              "thick thighs",
+              "small breasts"
+            ],
+            "heads": "7.2",
+            "bust": "small–medium",
+            "silhouette": "низкая, бёдра шире груди, полные бёдра при узкой талии",
+            "why_this_figure": "контраст роста и объёма — самый читаемый силуэт в линейке",
+            "feet_focus_level": 2,
+            "ntr_role": "NTR тип A — сама хочет, парень рядом",
+            "pose_prompt": "contrapposto, weight on one leg, other heel lifted, three-quarter view so the wide hips read",
+            "outfit": "чёрное мини-платье с открытой спиной, узорные полупрозрачные колготки, босоножки на шпильке",
+            "sprite": "assets/sprite/yuna.webp"
+          },
+          {
+            "id": "irene",
+            "name": "Айрин",
+            "figure": "athletic",
+            "figure_tags": [
+              "muscular female",
+              "toned",
+              "abs",
+              "medium breasts",
+              "athletic"
+            ],
+            "heads": "7.9",
+            "bust": "medium",
+            "silhouette": "рельеф, сильные бёдра, распрямлённая спина, низкий процент жира",
+            "why_this_figure": "мышцы вместо объёма: другая физика привлекательности",
+            "feet_focus_level": 3,
+            "ntr_role": "NTR тип B — бывшая вернулась, у неё есть партнёр",
+            "pose_prompt": "sitting on the edge of a low surface, barefoot, one foot presented toward the camera, arch tensed",
+            "outfit": "чёрный бандо-топ под расстёгнутой белой рубашкой, чёрные брюки с высокой талией, туфли-шпильки (или босая)",
+            "sprite": "assets/sprite/irene.webp"
+          },
+          {
+            "id": "sora",
+            "name": "Сора",
+            "figure": "shortstack",
+            "figure_tags": [
+              "shortstack",
+              "short",
+              "curvy",
+              "dense",
+              "large breasts"
+            ],
+            "heads": "7.0",
+            "bust": "large",
+            "silhouette": "низкая и плотная, объём при малом росте",
+            "why_this_figure": "эффект масштаба: то же тело на 160 см читается иначе",
+            "feet_focus_level": 1,
+            "ntr_role": "BSS — «я её первым полюбил»",
+            "pose_prompt": "standing, hands behind her back, ankles crossed, chin raised, camera slightly above",
+            "outfit": "белая футболка с узлом, чёрная кожаная мини-юбка, плотные колготки, ботинки на каблуке",
+            "sprite": "assets/sprite/sora.webp"
+          },
+          {
+            "id": "mika",
+            "name": "Мика",
+            "figure": "curvy secretary (нормальный вес)",
+            "figure_tags": [
+              "curvy",
+              "narrow waist",
+              "medium-large breasts",
+              "rounded hips",
+              "slim thighs",
+              "office lady"
+            ],
+            "heads": "7.6",
+            "bust": "medium–large",
+            "silhouette": "узкая талия, WHR 0.70, полная грудь, округлые бёдра, БЕЗ живота",
+            "why_this_figure": "объём за счёт формы, не за счёт жира: BF% — главный предиктор привлекательности",
+            "feet_focus_level": 2,
+            "ntr_role": "netorase — давление офиса",
+            "pose_prompt": "standing beside a desk in three-quarter view, lower back arched, pelvis tilted back, one heel dangling off her toes, hands clasped in front",
+            "outfit": "белая шёлковая блузка, юбка-карандаш с высокой талией, плотные колготки",
+            "sprite": "assets/sprite/mika.webp"
+          },
+          {
+            "id": "nova",
+            "name": "Нова",
+            "figure": "gyaru",
+            "figure_tags": [
+              "gyaru",
+              "tan skin",
+              "long blonde hair",
+              "belly chain",
+              "slim waist",
+              "medium breasts"
+            ],
+            "heads": "8.0",
+            "bust": "medium",
+            "silhouette": "высокая, тонкая в талии, загорелая, длинные волосы, качающая бёдрами",
+            "why_this_figure": "самый фетишизированный типаж манги: загар, длинные волосы, наглый взгляд",
+            "feet_focus_level": 2,
+            "ntr_role": "reverse — хочет забрать тебя",
+            "pose_prompt": "walking away from the camera and looking back over her shoulder, hips swaying, one hand in her hair",
+            "outfit": "укороченная белая рубашка с завязкой, чёрная кожаная мини-юбка, серебряная цепочка на животе, босоножки на каблуке",
+            "sprite": "assets/sprite/nova.webp"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tension-engine",
+      "kind": "mechanic",
+      "title": "Двигатель напряжения (harder)",
+      "data": {
+        "summary": "Три оси на героиню: привязанность / давление / публичность. Давление растёт само и быстрее, чем в v1; окно на ответ короче, провал больнее.",
+        "axes": {
+          "affinity": "0–100, 6 уровней — растит игрок",
+          "pressure": "0–100, +2.5/час игрового времени (v1: +1/час), скачок +15 при «событии»",
+          "witness": "0–100, публичность происходящего — множитель остроты"
+        },
+        "window": {
+          "length": "24 часа игрового времени (v1: 48)",
+          "warning": "предупреждение за 6 часов",
+          "on_success": "pressure −40, уникальный скин, +1 уровень доверия",
+          "on_fail": "pressure +20, «горькая» сцена, героиня уходит в холод на 2 сессии"
+        },
+        "escalation": "на 70+ давления героиня сама пишет/приходит — это не награда, а последний шанс",
+        "monetization": "платят не за контент, а за право успеть: ускорение восстановления, «второй шанс», скин-ответ",
+        "guardrails": [
+          "героиня не наказывается за выбор игрока — растёт только цена",
+          "нет третьих лиц в кадре в базовой версии",
+          "всё откровенное — в отдельном age-gated канале, игра остаётся suggestive/L2+"
+        ],
+        "why_it_sells": "создаёт дедлайн. Дедлайн создаёт трату. Это самый сильный крючок жанра и он не требует откровенности."
+      }
+    },
+    {
+      "id": "spice-policy",
+      "kind": "policy",
+      "title": "Политика откровенности (L2+)",
+      "data": {
+        "levels": {
+          "L0_sfw": "лицо, плечи, руки — соцсети, сторы, маркетинг",
+          "L1_suggestive": "облегающее, чулки, каблуки, ракурсы, акцент на ногах и стопах",
+          "L2_hot": "максимально горячо в рамках одежды: мокрый шёлк, разрез до бедра, открытая спина, белье как верхний слой, видимые подвязки, кроп-топы — ПЛАТНЫЕ скины",
+          "L3_explicit": "вне базовой сборки: отдельный age-gated канал/патч, своя платёжка, без мобильных сторов"
+        },
+        "approved_default": "L1 + L2+ (решение владельца 20.11.2026)",
+        "l2plus_definition": {
+          "allowed": [
+            "открытая спина и живот",
+            "кроп-топы и бандо",
+            "белье как элемент образа (под расстёгнутой рубашкой)",
+            "видимые подвязки и резинки чулок",
+            "разрез до бедра",
+            "мокрый/просвечивающий шёлк",
+            "провокационные позы и ракурсы снизу",
+            "акцент на стопах и обуви"
+          ],
+          "stays_in_l3": [
+            "полная или частичная нагота",
+            "откровенные сцены",
+            "любой контент с третьими лицами в кадре"
+          ],
+          "red_lines": [
+            "все персонажи 18+, взрослый силуэт и лицо",
+            "никакого контента с несовершеннолетними — безусловный запрет",
+            "age-gate до любого контента"
+          ]
+        },
+        "payment_impact": "L1/L2+ → обычные эквайеры, Steam, Google Play. L3 закрывает эти каналы.",
+        "decision_needed": "финальное «да» по списку allowed/stays_in_l3"
+      }
+    },
+    {
+      "id": "prompt-stack",
+      "kind": "policy",
+      "title": "Промпт-стек v5 (открытость + проход артефактов)",
+      "data": {
+        "structure": "качество → субъект → тело/объём → костюм/поза → камера/свет. Негатив ≈ 30% результата; seed фиксируется на время итераций.",
+        "model_families": {
+          "anima_2b_our_base": "бори-теги строчными с пробелами; score_7 без изменений; артисты через @; (tag:2) — вес нужен выше SDXL; tag dropout встроен",
+          "noobai_xl_vpred": "лучшее понимание нишевых тегов; v-pred + Euler, CFG 4–5, 28–35 шагов, 832×1216",
+          "illustrious_1_1": "самый стабильный LoRA-экосистемный выбор, чистый лайн",
+          "pony_v6": "score_9 тиры + source_anime + rating_*, CLIP skip 2",
+          "chroma": "открытая 8.9B (линия Flux schnell) — фотореализм без цензуры",
+          "wan_2x": "открытое image-to-video",
+          "manhwa_lora_recipe": {
+            "trigger": "manhwa_style (Illustrious) / manhwastyle (Pony)",
+            "strength": "0.75–1.0; выше 1.0 — потеря геометрии и авторского лица",
+            "steps": "30–50",
+            "cfg": "3.5–4.5",
+            "sampler": "DPM++ 2M Karras",
+            "pony_extra": "score_9/8/7/6_up обязательны; негатив loli, child, young"
+          }
+        },
+        "weights": "синтаксис (tag:1.2); рабочий диапазон 0.7–1.5; вне диапазона анатомия ломается",
+        "dynamic_syntax": {
+          "variants": "{a|b|c} — случайный выбор варианта",
+          "multi_pick": "{2$$__body_curvy__} — выбрать 2 строки без повторов",
+          "wildcards": "__body_curvy__ подтягивает assets/wildcards/body_curvy.txt",
+          "glob": "__outfit*__ — все подходящие файлы",
+          "once": "@once{} — значение тянется один раз на батч (распределяет позы по пачке)",
+          "conditional": "@if{bust=huge, underboob|alt=sideboob} — блок включается по условию",
+          "sources": [
+            "adieyal/dynamicprompts",
+            "mattjaybe/sd-wildcards",
+            "whitevamp/civitai-wildcard-prompt",
+            "OldBlackJoe/sd-dynamic-prompts"
+          ]
+        },
+        "files": {
+          "dir": "assets/wildcards/",
+          "set": [
+            "body_curvy.txt",
+            "figure_types.txt",
+            "pose_ecchi.txt",
+            "feet_poses.txt",
+            "footwear.txt",
+            "legwear.txt",
+            "outfit_l2plus.txt",
+            "camera.txt"
+          ],
+          "builder": "tools/prompt_build.py — раскрывает {a|b}, {N$$__file__} и __file__ локально, без сети"
+        },
+        "bolder_moves": [
+          "negative-теги на «модельную» худобу прямо в базовом блоке (slim body, thin legs, flat chest)",
+          "вес объёма 1.25–1.4 на груди/бёдрах, вес костюма ниже — иначе ткань «съедает» форму",
+          "anatomy-gated блоки: underboob только при huge/gigantic, иначе силуэт разваливается",
+          "фиксировать seed при переборе весов — иначе сравниваешь не то",
+          "кадр: «персонаж ≤80% высоты, обувь целиком в кадре» — правило, а не пожелание"
+        ],
+        "openness": {
+          "principle": "«открытость» генерации — это модель + отсутствие тормозящих тегов, а не длина промпта",
+          "do": [
+            "писать прямо то, что нужно: плотность ткани, натяжение, где именно видно кожу",
+            "негатив на цензуру-артефакты: mosaic censoring, bar censor, censored, steam, hair over breasts",
+            "negative на то, что делает фигуру «одной на всех»: same face syndrome, identical body types",
+            "rating_explicit / rating_questionable — только на моделях, которые на них обучены (Pony)",
+            "фиксировать seed и менять ОДИН параметр за итерацию",
+            "проверять кадр на обрез кистей и волос до приёмки: cut-off рука читается как брак сильнее, чем лишний палец"
+          ],
+          "dont": [
+            "не смешивать score-тиры разных семейств",
+            "не перечислять всё: tag dropout",
+            "не описывать позу словами там, где работает ControlNet-скелет",
+            "не лечить артефакт полной перерисовкой кадра",
+            "не ставить позу словами там, где нужен OpenPose-скелет"
+          ],
+          "triple_lock": "консистентность персонажа: IP-Adapter FaceID ~0.75 + характер-LoRA ~0.8 + ControlNet позы 0.8–1.0"
+        },
+        "artifact_pass": "после генерации: ADetailer/FaceDetailer (лицо 0.4, кисти 0.45) → пиксельный апскейл → локальный инпейнт Flux Fill → qa_render + pyiqa",
+        "implementation": "tools/prompt_forge.py — сборка под героиню/модель/уровень; tools/prompt_build.py — wildcard-сборка",
+        "heat": "см. элемент heat-protocol; уровень задаётся переключателем, а не переписыванием промпта",
+        "corpus_evidence": "masterpiece 56.6% / best quality 55.7% / низкокачественные негативы 92.6% (корпус 2481, см. prompt-corpus)",
+        "style_switch": "регистр задаётся --style, см. style-registers; по умолчанию manhwa-color"
+      }
+    },
+    {
+      "id": "tools-stack",
+      "kind": "policy",
+      "title": "Стек инструментов v5 (движки + лечение артефактов)",
+      "data": {
+        "runtime_web": "PixiJS 8 + @drincs/pixi-vn (VN-фреймворк) — Spine 2D через @drincs/pixi-vn-spine; Live2D через pixi-live2d-display",
+        "rig": "rig-c (слои See-through → Spine 4.3 skeleton → играет в PixiJS 8 без Spine-рантайма) | Rigby2D (бесплатный, рантаймы PixiJS 8, Ren'Py 8.3+ с липсинком, Godot, Unity)",
+        "classic_vn": "Ren'Py (MIT, самый большой корпус VN, веб-экспорт) — запасной путь, если веб-стек не потянет",
+        "unity_path": "Naninovel ($150) — только если понадобится Unity-пайплайн",
+        "consistency": "IP-Adapter FaceID 0.75 + character LoRA 0.8 + ControlNet OpenPose 0.8–1.0 (triple-lock)",
+        "pose": "ControlNet OpenPose через COCO-18 JSON; см. pose-library",
+        "layers": "See-through (декомпозиция слоёв) → image2live2d / rig-c",
+        "anim": "Wan 2.x image-to-video для промо-роликов",
+        "voice": "GPT-SoVITS (рус/кор/яп) + липсинк",
+        "deploy": "статика + Vercel; TG/itch.io как каналы входа",
+        "decision": "веб-первый (PixiJS 8 + pixi-vn), Ren'Py — только как офлайн-сборка",
+        "artifacts": "ADetailer (Bing-su) / ComfyUI Impact Pack (FaceDetailer + SAM) / Flux Fill inpaint / Regional Prompter / pyiqa (MUSIQ, CLIPIQA, MANIQA, TOPIQ-face)",
+        "attraction_module": "поза = скелет с прогибом 45.5° и наклоном таза; камера по умолчанию 3/4 или сзади",
+        "os_stack": "см. элемент os-stack (ComfyUI, Forge Neo, Fooocus, Flux-Uncensored-V2)"
+      }
+    },
+    {
+      "id": "artifact-stack",
+      "kind": "policy",
+      "title": "Артефакты: чем лечим и чем проверяем (2026)",
+      "data": {
+        "principle": "артефакты не «исправляют перерисовкой всего кадра»: сначала ловим, потом лечим ТОЛЬКО сломанную область",
+        "detect_repair": {
+          "adetailer": "A1111/Forge: face_yolov8s.pt (лица, точнее n-версии), hand_yolov8n.pt (кисти), person_yolov8n-seg.pt; denoise 0.35–0.45 для лица (0.4 — сохраняет личность, 0.6 — перелепливает), 0.4–0.6 для кистей; SAM (sam_vit_b_01ec64.pth) превращает bbox в силуэт, чтобы не залезть в фон",
+          "comfyui": "Impact Pack: UltralyticsDetectorProvider + SAMLoader → Segs&Mask → FaceDetailer; guide_size/max_size ограничивают перерисовку; FaceDetailer (pipe) для 2-го прохода; отдельный детектор hand_yolov8s.pt в цепочку",
+          "inpaint": "Flux Fill (ComfyUI-Flux-Inpainting) или SDXL inpaint; маска с пером 10–15 px, denoise 0.4–0.6",
+          "order": "генерация → детекторы лиц/кистей → пиксельный апскейл → локальный инпейнт → метрики. Не наоборот.",
+          "multi_char": "Regional Prompter / Forge Couple — иначе промпты персонажей слипаются"
+        },
+        "cause_prevention": [
+          "ControlNet OpenPose: поза скелетом, а не словами — 80% деформаций отсюда",
+          "разрешение 1536²-класс: мелкое лицо в полный рост = каша",
+          "кадр с запасом: кисти и волосы НЕ на краю кадра (наш случай с Микой — обрезанная кисть)",
+          "негатив: bad hands, extra digits, fused fingers, deformed feet, broken heel",
+          "фиксированный seed на время итераций"
+        ],
+        "metrics": {
+          "offline": "tools/qa_render.py — хроматическая бахрома, обрез кадра, резкость (Лаплас), симметрия силуэта, бюджет байт",
+          "ml": "pyiqa: MUSIQ, CLIPIQA, MANIQA, LIQE, NIQE/BRISQUE, TOPIQ-face; LAION-Aes для эстетики",
+          "identity": "DINOv2/CLIP между кадрами одного персонажа (ArcFace для аниме не работает)",
+          "adherence": "CLIP-T: соответствие промпту"
+        },
+        "gate": "в продакшн не идёт кадр, у которого: касание края кадра, зелёная бахрома, резкость ниже порога или ML-метрика ниже базы по касту"
+      }
+    },
+    {
+      "id": "style-dna",
+      "kind": "style",
+      "title": "ДНК стиля: манхва / манга / хентай-продакшн",
+      "data": {
+        "principle": "Линия — половина стиля. Волосы — массы и ритмичные пряди, а не отдельные волоски. Тени — плашками, тон — скупо, большие белые зоны.",
+        "line": {
+          "tool": "толстая чистая линия с переменной толщиной: толще на теневой стороне и в перекрытиях, тоньше на свету",
+          "tags": [
+            "thick lineart",
+            "clean lineart",
+            "variable line weight",
+            "sharp outlines"
+          ],
+          "manhwa_tell": "контур читается даже в уменьшении до 30% — это главный признак webtoon-кадра"
+        },
+        "shading": {
+          "mode": "мягкий cel-shading в 2 слоя + один слой мягкого градиента на объёме",
+          "tags": [
+            "soft cel shading",
+            "2-tone shading",
+            "gradient shadow",
+            "detailed fabric folds"
+          ],
+          "rule": "тень кожи уходит в холодный сине-фиолетовый, а не в грязь: тёплый скин + комплементарная тень"
+        },
+        "hair": {
+          "structure": "3–5 крупных масс, каждая разбита на ритмичные пряди; блик — одна широкая полоса по дуге черепа",
+          "tags": [
+            "flowing hair",
+            "layered strands",
+            "hair highlights",
+            "glossy hair"
+          ],
+          "avoid": "волосок-к-волоску (hair strand by strand) — даёт «пластик» и мыло"
+        },
+        "eyes": {
+          "rule": "прокрашивать белок и ресничный контур, не только радужку; блик — два пятна (большое сверху, точка снизу)",
+          "tags": [
+            "detailed eyes",
+            "eyelashes",
+            "eye highlights",
+            "makeup"
+          ],
+          "manhwa_tell": "в webtoon-кадре макияж глаз контрастнее, чем в аниме; тушь и подводка читаются"
+        },
+        "skin": {
+          "signals": [
+            "glossy skin",
+            "sheen on curves",
+            "sweat on skin",
+            "blush gradient"
+          ],
+          "rule": "specular sheen идёт по изгибу (плечо, бедро, голень) — это дешёвый и честный способ добавить «горячо» без обнажения"
+        },
+        "composition": {
+          "manhwa_frame": "вертикальный кадр, фигура на 70–80% высоты, контровой свет, размытый интерьер как глубина",
+          "tags": [
+            "vertical composition",
+            "cinematic rim light",
+            "depth of field"
+          ],
+          "camera": [
+            "full body",
+            "low angle, from below",
+            "cowboy shot",
+            "dutch angle"
+          ]
+        },
+        "superseded_check": "если кадр похож на «аниме-арт 2015» — не хватает толстой линии и контрового света; если похож на 3D — не хватает cel-shading и белых зон",
+        "tags_block": [
+          "thick lineart",
+          "soft cel shading",
+          "detailed fabric folds",
+          "glossy highlights",
+          "cinematic rim light",
+          "manhwa style"
+        ],
+        "status": "v2: уточнён регистрами (style-registers); глянец больше не обязателен",
+        "screentone": "тон точками в тенях, кожу не заливать (manga-grammar)"
+      }
+    },
+    {
+      "id": "heat-protocol",
+      "kind": "policy",
+      "title": "Шкала горячести L1–L3 и четыре рычага",
+      "data": {
+        "principle": "«Смелее» — не количество тегов, а четыре рычага: близость кадра, физика ткани, сигналы кожи, направление взгляда. Тег-суп даёт мусор и артефакты.",
+        "levers": {
+          "proximity": "насколько близко камера и сколько кадра занимает тело (full body → cowboy → close-up)",
+          "fabric": "натяжение, полупрозрачность, мокрость, сползание — одежда остаётся, но работает против себя",
+          "skin": "блеск по изгибу, пот, румянец градиентом — без обнажения",
+          "gaze": "направление взгляда задаёт сюжет: at viewer (вызов) / down at viewer (сверху) / looking away (застигнута) / over shoulder (уходит)"
+        },
+        "levels": {
+          "L1": {
+            "tags": [
+              "form-fitting",
+              "sheer legwear",
+              "high heels",
+              "confident posture"
+            ],
+            "camera": "cowboy shot",
+            "expression": [
+              "light smile",
+              "smirk",
+              "looking at viewer"
+            ],
+            "use": "соцсети, сторы, маркетинг"
+          },
+          "L2": {
+            "tags": [
+              "(fabric tension:1.15)",
+              "translucent fabric",
+              "cleavage",
+              "bare shoulders",
+              "glossy skin",
+              "sweat on skin",
+              "underboob"
+            ],
+            "camera": "full body, low angle, from below",
+            "expression": [
+              "blush",
+              "parted lips",
+              "half-closed eyes",
+              "looking down at viewer"
+            ],
+            "use": "целевой уровень игры, платные скины"
+          },
+          "L3": {
+            "tags": [
+              "nude",
+              "nipples",
+              "wet skin",
+              "arched back",
+              "spread legs"
+            ],
+            "camera": "full body, low angle, extreme close-up",
+            "expression": [
+              "heavy breathing",
+              "tongue out",
+              "half-closed eyes",
+              "blush"
+            ],
+            "use": "отдельный age-gated канал, своя платёжка, без мобильных сторов"
+          }
+        },
+        "escalation_rule": "Повышай один рычаг за шаг. Два сразу — результат «пережарен» и модель теряет фигуру.",
+        "model_adapters": {
+          "anima": "вес ×2 (tag:2); score_7; артисты через @; негатив без score-тиров",
+          "illustrious": "бор-теги + тег manhwa_style; LoRA 0.75–1.0; CFG 4–5",
+          "pony": "score_9/8/7/6_up + source_anime + rating_safe|questionable|explicit по уровню; CLIP skip 2",
+          "flux": "теги не работают — тот же смысл прозой, без весов и скобок"
+        },
+        "rating_map": {
+          "pony": {
+            "L1": "rating_safe",
+            "L2": "rating_questionable",
+            "L3": "rating_explicit"
+          }
+        },
+        "censor_negatives": [
+          "mosaic censoring",
+          "bar censor",
+          "hair over breasts",
+          "steam"
+        ],
+        "censor_note": "обфускация партиалами (предмет, пар, волосы) — приём продакшна; техническая цензура (мозаика) в негатив всегда",
+        "implementation": "tools/prompt_forge.py --heat 1|2|3 --model anima|illustrious|pony|flux"
+      }
+    },
+    {
+      "id": "tag-db",
+      "kind": "data",
+      "title": "База тегов Danbooru с частотами (локально)",
+      "data": {
+        "why": "Модель взвешивает теги по частоте в обучении. blush (3.6M постов) и редкий тег на 800 постов ведут себя по-разному; частота — единственный способ оценить силу тега до рендера.",
+        "files": {
+          "assets/tags/feature.csv": "2930 тегов тела/лица/волос",
+          "assets/tags/action.csv": "2500 поз и действий",
+          "assets/tags/expression.csv": "285 эмоций",
+          "assets/tags/attire.csv": "9646 единиц одежды",
+          "assets/tags/style.csv": "209 художественных стилей"
+        },
+        "provenance": "классифицированная выгрузка тегов Danbooru (tag,count), 5 CSV ~330 КБ",
+        "tool": "tools/tag_db.py --top|--search|--export",
+        "derived_wildcards": {
+          "assets/wildcards/db_expressions.txt": 14,
+          "assets/wildcards/db_actions.txt": 22,
+          "assets/wildcards/db_attire.txt": 24
+        },
+        "rules": [
+          "сначала ищи точный термин, потом синонимы: thigh_strap точнее, чем «подвязки»",
+          "тег ниже 1000 постов — слабый: усиливать весом или не использовать",
+          "символьные теги (\"(:d\") не тащить в негатив — они конфликтуют с выражением лица"
+        ],
+        "spot_checks": {
+          "thighhighs": 1419181,
+          "thick_thighs": 126668,
+          "presenting_foot": 3317,
+          "blush": 3616999,
+          "spread_legs": 311892
+        }
+      }
+    },
+    {
+      "id": "pose-library",
+      "kind": "style",
+      "title": "Библиотека поз: скелет вместо слов",
+      "data": {
+        "why": "Позу словами задавать нельзя — модель угадывает. Скелет ControlNet задаёт её точно, а теги позы только поддерживают.",
+        "format": "JSON COCO-18 (18 точек: нос, шея, плечи, локти, кисти, бёдра, колени, стопы) + canvas_width/canvas_height; экспорт из редактора поз",
+        "sources": [
+          "ComfyUI-OpenPose-Studio — редактор кистей, галерея, коллекции, экспорт COCO-18",
+          "ComfyUI-3D-OpenPose-Editor2026 (+IK-форк) — 3D-скелет, глубина и ракурс",
+          "UmeAiRT/ComfyUI-Workflows — готовые связки ControlNet openpose"
+        ],
+        "required_poses_per_heroine": {
+          "idle": "вес на одной ноге, таз смещён (hip sway), плечи под углом",
+          "ntr_pressure": "корпус отвёрнут, голова повёрнута к камере — «застигнута, но смотрит»",
+          "foot_focus": "опора на одну ногу, вторая стопа поднята к камере (presenting foot, 3317 постов)",
+          "seated_crossed": "сидя, нога на ногу, стопа в профиль — каблук как продолжение линии",
+          "over_shoulder": "спина, голова через плечо — самый сильный ракурс по привлекательности"
+        },
+        "controlnet": {
+          "preprocessor": "openpose / openpose_full (с кистями)",
+          "weight": "0.8–1.0",
+          "end_percent": "0.7–0.85 — поза держится, но одежда и волосы свободны"
+        },
+        "artifact_prevention": "скелет исключает перекрёщенные конечности и лишние пальцы — дешевле, чем ремонт инпейнтом",
+        "naming": "assets/pose/<heroine>_<slot>.json, слоты: idle | ntr | foot | seated | shoulder"
+      }
+    },
+    {
+      "id": "os-stack",
+      "kind": "policy",
+      "title": "Открытый стек генерации на своём железе (включая NSFW)",
+      "data": {
+        "why": "Своя машина = нет модерации, нет лимитов, есть LoRA и ControlNet. Облачные генераторы для L2/L3 не годятся.",
+        "runners": {
+          "comfyui": "основной: узлы ControlNet/IP-Adapter/ADetailer/Impact Pack, ноль модерации из коробки",
+          "forge_neo": "Forge Neo 2.28.1 — актуальная замена умершего оригинального Forge; SDXL + Flux",
+          "fooocus": "простой SDXL-путь; в коде default_black_out_nsfw=False (в оригинале). Flux НЕ поддерживает",
+          "ruined_fooocus": "форк с Flux/SD3/GGUF и видео — если нужен Flux без ComfyUI",
+          "invokeai": "второй UI с хорошим холстом и слоями",
+          "draw_things": "macOS/iOS, для быстрых скетчей на месте"
+        },
+        "models": {
+          "flux_uncensored_v2": "enhanceaiteam/Flux-Uncensored-V2 — база без встроенного отказа",
+          "flux_gguf": "city96/FLUX.1-dev-gguf — кванты для 12–16 ГБ VRAM",
+          "flux_nf4": "lllyasviel/flux1-dev-bnb-nf4 — 4-бит",
+          "flux_loras": "XLabs-AI/flux-lora-collection"
+        },
+        "dataset_tools": {
+          "imgutils": "deepghs/imgutils — аниме-обработка: резка, детект лиц, кроп",
+          "waifuc": "deepghs/waifuc — сбор датасета из галереи",
+          "cyberharem": "deepghs/cyberharem — авто-обучение LoRA (P-LoRA/kohya)",
+          "sdeval": "deepghs/sdeval — оценка результата обучения"
+        },
+        "repair": {
+          "adetailer": "face_yolov8s / hand_yolov8n / person_yolov8n-seg, denoise 0.35–0.45 лицо / 0.4–0.6 кисти",
+          "sam": "SAM-маски для точного инпейнта",
+          "flux_fill": "инпейнт с feather 10–15 px",
+          "impact_pack": "FaceDetailer"
+        },
+        "metrics": {
+          "pyiqa": [
+            "MUSIQ",
+            "CLIPIQA",
+            "MANIQA",
+            "TOPIQ-face"
+          ],
+          "local": "tools/qa_render.py --ml"
+        },
+        "vram_note": "SDXL-класс 8–12 ГБ; Flux nf4/gguf 12–16 ГБ; LoRA-тренинг 24 ГБ или облако"
+      }
+    },
+    {
+      "id": "arena-prompting",
+      "kind": "policy",
+      "title": "Как ставить задачи агенту (Arena.ai agent mode)",
+      "data": {
+        "principle": "Агент видит только текст задачи и файлы репозитория. Ничего из переписки он не знает — задача должна быть самодостаточной.",
+        "task_anatomy": [
+          "одна цель одной фразой",
+          "точные пути файлов, которые надо прочитать",
+          "готовый промпт целиком, без «как в прошлый раз»",
+          "проверяемые критерии приёмки (чек-лист)",
+          "команды проверки (pytest / qa_render / canon check)",
+          "запреты: что нельзя менять и что нельзя ослаблять"
+        ],
+        "rules": [
+          "не забивать контекст историей: свежие данные — из файлов, а не из рассказа",
+          "узкий объём: одна задача = один результат",
+          "критерии должны быть измеримы, иначе агент отчитается «готово» без доказательств",
+          "формат отчёта фиксировать заранее: сделано / проверено / файлы / ждёт человека"
+        ],
+        "implementation": "tools/arena_task.py --heroine <id> --kind render|qa|style --heat 1|2|3 — собирает задачу из канона, карточки и форжа",
+        "outputs": [
+          "tasks/arena/reika-render-L2.md",
+          "tasks/arena/selena-style-L2.md",
+          "tasks/arena/yuna-qa-L2.md"
+        ]
+      }
+    },
+    {
+      "id": "decisions-2026-11-20-style-v6-rejected",
+      "kind": "logic",
+      "title": "Решение владельца: стиль v6 отклонён",
+      "data": {
+        "decision": "СТИЛЬ v6 ОТКЛОНЁН",
+        "quote": "«Не одобряю, стиль мне не нравится»",
+        "diagnosis": "v6 вышел полуглянцевым AI-рендером: мягкие градиенты, глянцевая кожа, кинематографический свет. Это регистр 'дорогой 3D-рендер', а не печатная манга/манхва.",
+        "fix": "стиль стал параметром: три регистра (ink-panel / manhwa-color / webtoon-drama), каждый со своими якорями и анти-якорями; конфликтующие теги вычищаются автоматически",
+        "what_unchanged": "фигуры, темпераменты, состав и уровни горячести не тронуты",
+        "evidence": "assets/concept/_style_ballot.jpg — одна героиня в трёх регистрах",
+        "tool": "tools/prompt_forge.py --style ink-panel|manhwa-color|webtoon-drama"
+      }
+    },
+    {
+      "id": "style-registers",
+      "kind": "style",
+      "title": "Регистры стиля как параметр",
+      "data": {
+        "principle": "Стиль задаётся не силой тегов, а регистром. Каждый регистр — свой набор якорей и ЗАПРЕТОВ; конфликтующие теги выбрасываются кодом (STYLE_VETO), иначе модель слушает оба.",
+        "registers": {
+          "ink-panel": {
+            "anchors": [
+              "bold ink lineart",
+              "variable line weight",
+              "flat cel shading",
+              "spot blacks",
+              "screentone accents",
+              "limited palette",
+              "dramatic panel composition",
+              "high contrast"
+            ],
+            "veto": [
+              "glossy skin",
+              "glossy highlights",
+              "glossy hair"
+            ],
+            "negatives": [
+              "airbrushed",
+              "3d render",
+              "plastic skin",
+              "soft focus",
+              "gradient mesh"
+            ],
+            "why": "печатная страница: чёрные плашки, тон точками, три цвета"
+          },
+          "manhwa-color": {
+            "anchors": [
+              "thick lineart",
+              "two-tone cel shading",
+              "muted palette",
+              "cool violet shadow",
+              "selective rim light",
+              "detailed fabric folds",
+              "manhwa style"
+            ],
+            "veto": [
+              "glossy highlights"
+            ],
+            "negatives": [
+              "airbrushed",
+              "3d render",
+              "oversaturated",
+              "glossy plastic"
+            ],
+            "why": "цветной вебтун: линия главная, цвет подчинён",
+            "status": "ПРИНЯТ"
+          },
+          "webtoon-drama": {
+            "anchors": [
+              "thick lineart",
+              "soft cel shading",
+              "detailed fabric folds",
+              "glossy highlights",
+              "cinematic rim light",
+              "manhwa style"
+            ],
+            "veto": [],
+            "negatives": [],
+            "why": "BASELINE v6 — отклонён, оставлен только для сравнения A/B",
+            "status": "ОТКЛОНЁН (v6)"
+          }
+        },
+        "default": "manhwa-color",
+        "proof": "assets/concept/_style_ballot.jpg (A ink-penal / B flat manhwa / C v6 rejected)",
+        "chosen_by": "владелец, 20.11.2026, ответ «B»"
+      }
+    },
+    {
+      "id": "prompt-corpus",
+      "kind": "data",
+      "title": "Корпус реальных промптов и его фингерпринт",
+      "data": {
+        "why": "Промпт не придумывают — его собирают из того, что массово работает. Корпус даёт частоты: какие блоки качества и защиты реально стоят в тысячах строк.",
+        "source": {
+          "dataset": "jtatman/stable-diffusion-prompts-uncensored",
+          "license": "MIT",
+          "total_in_dataset": 851568,
+          "fetched_locally": 2481,
+          "fields": [
+            "model",
+            "prompt",
+            "negative_prompt"
+          ],
+          "access": "datasets-server rows API, постранично (100 строк сервер обрезает, 20 — норма)"
+        },
+        "tool": "tools/corpus_fetch.py (сбор) → tools/prompt_miner.py (добыча)",
+        "fingerprint": {
+          "masterpiece": "56.6% промптов",
+          "best quality": "55.7%",
+          "1girl": "42.6%",
+          "negative low quality": "92.6%",
+          "negative worst quality": "89.0%",
+          "negative bad anatomy": "68.8%",
+          "negative bad hands": "36.0%",
+          "negative watermark": "57.4%",
+          "negative text": "52.2%"
+        },
+        "lora_practice": {
+          "add_detail": "вес 0.77",
+          "koreanDollLikeness": "вес 0.29–0.30",
+          "more_details": "вес 0.43"
+        },
+        "honest_limits": [
+          "корпус смещён в фотореализм (chilloutmix/majicmix): anime/manhwa упоминаются редко (manhwa — 0 из 2481)",
+          "Civiverse-SFW и Civitai-2m отдают HTTP 500 через datasets-server, локально не выкачаны",
+          "поэтому аниме-лексика берётся из тегов Danbooru (tag-db), а техника — из корпуса"
+        ],
+        "cli": [
+          "python3 tools/prompt_miner.py --top 25",
+          "python3 tools/prompt_miner.py --cooccur anime",
+          "python3 tools/prompt_miner.py --fingerprint --wildcards"
+        ]
+      }
+    },
+    {
+      "id": "nsfw-atlas",
+      "kind": "data",
+      "title": "Атлас явной лексики с реальными частотами",
+      "data": {
+        "why": "База NSFW-промптов должна быть проверяемой: у каждого термина есть частота на Danbooru, то есть сила. Термин без частоты — не берём.",
+        "files": {
+          "assets/tags/atlas.json": "8 групп, термины + частоты",
+          "assets/wildcards/atlas_*.txt": "по файлу на группу",
+          "assets/tags/{action,attire,feature,expression,other}.csv": "источник частот"
+        },
+        "groups": {
+          "act_solo": "spread legs 311 892 · on back 311 470 · masturbation 45 223",
+          "act_pair": "sex 332 426 · vaginal 244 654 · fellatio 83 864 · cowgirl position",
+          "fluids": "sweat 654 261 · tears 283 990 · cum in pussy 126 180 · cum on body 115 853",
+          "body_explicit": "cleavage 1 230 064 · nipples 1 018 125 · ass 721 523",
+          "clothing_state": "torn clothes 184 178 · wet clothes 58 200 · panties aside 28 919",
+          "fetish_feet": "barefoot 455 595 · high heels 249 891 · toes 190 560 · soles 129 150 · presenting foot 3 317",
+          "restraint_pressure": "crying 98 092 · restrained 56 595 · bound wrists 24 901",
+          "face_heat": "blush 3 616 999 · parted lips 627 134 · heavy breathing 45 345"
+        },
+        "rule": "L3-канал берёт термины ТОЛЬКО из атласа; всё, чего там нет, — импровизация и в продакшн не идёт.",
+        "tool": "python3 tools/tag_db.py --atlas"
+      }
+    },
+    {
+      "id": "manga-grammar",
+      "kind": "style",
+      "title": "Грамматика манга-панели (объёмы: 109 томов Manga109)",
+      "data": {
+        "why": "Стиль — это не только линия, но и то, как построен кадр. Manga109 (109 томов, 21 142 страницы, 103 900 панелей) — самая большая открытая размеченная база манги; из неё берём устройство кадра, а не картинки.",
+        "corpus": {
+          "Manga109": "109 томов · 21 142 страницы · 103 900 панелей · 157 152 персонажа · 118 715 лиц · 147 918 текстовых блоков",
+          "annotations": "панели, персонажи, лица, текст, ономатопея, диалоги (Manga109Dialog 132 692 пары)",
+          "license_note": "Manga109 — исследовательская лицензия с обязательной атрибуцией; используем как справочник приёмов, не как тренировочные данные"
+        },
+        "panel_devices": {
+          "spot_black": "крупная чёрная плашка вместо детального фона — держит фокус на фигуре",
+          "screentone": "тон точками только в тени, кожу не заливать",
+          "speed_lines": "линии движения по краю кадра, не по лицу",
+          "slant_frame": "наклон панели подчёркивает давление сцены",
+          "gutter_bleed": "фигура выходит за панель — приём «не помещается в кадр»",
+          "eye_line": "нижняя треть кадра на уровне глаз сидящей фигуры"
+        },
+        "apply": "в промпте — 'dramatic panel composition', 'spot blacks', 'screentone accents'; в композиции — 70–80% высоты кадра и запас по краям"
+      }
+    },
+    {
+      "id": "arena-tournament",
+      "kind": "policy",
+      "title": "Турнир как способ разруливать «не нравится»",
+      "data": {
+        "why": "Когда ответ забракован без точной формулировки, дешевле прогнать N разных подходов и рассудить их по рубрике, чем угадывать правку в переписке.",
+        "protocol": [
+          "task.md — самодостаточная задача + ЧТО именно отвергнуто и почему",
+          "cards.md — по одной стратегии на агента (first principles, inversion, adversarial, constraint first, worked example, simplest, edge cases, systems)"
+        ],
+        "rubric": [
+          "стиль-регистр",
+          "фигура по карточке",
+          "артефакты",
+          "уровень горячести",
+          "узнаваемость"
+        ],
+        "judging": "слепое сравнение X/Y по рубрике 0–10; fatal только за проверенный брак (обрез кисти, текст в кадре, чужая героиня); fatal не может выиграть",
+        "generator": "python3 tools/arena_task.py --heroine selena --kind tournament --heat 2",
+        "outputs": [
+          "tasks/arena/<slug>/task.md",
+          "rubric.md",
+          "cards.md",
+          "baseline.md",
+          "README.md"
+        ],
+        "precedent": "турецкий опыт: 16 агентов для рутины, 100 — для решения, которое определяет продукт"
+      }
+    },
+    {
+      "id": "decisions-2026-11-20-register-B",
+      "kind": "logic",
+      "title": "Решение владельца: регистр B принят",
+      "data": {
+        "decision": "регистр B — manhwa-color",
+        "quote": "«B»",
+        "applied": [
+          "style-registers.default = manhwa-color",
+          "весь каст из 7 героинь пересобран в регистре B",
+          "каст-лист в истинном масштабе: assets/sprite/_cast_v7_B.jpg",
+          "15 спрайтов прошли qa_sprites и qa_render"
+        ],
+        "registers_status": {
+          "manhwa-color": "ПРИНЯТ — рабочий регистр",
+          "ink-panel": "не выбран, остаётся как альтернатива",
+          "webtoon-drama": "отклонён (v6), только для сравнения"
+        },
+        "note": "регистр описывается не вкусом, а параметрами: толстый равномерный контур, два тона cel, приглушённая палитра, холодная фиолетовая тень, один узкий контровой свет, блики минимальны"
+      }
+    },
+    {
+      "id": "cast-v7-B",
+      "kind": "cast",
+      "title": "Каст в регистре B (7 спрайтов, истинный масштаб)",
+      "data": {
+        "proof": "assets/sprite/_cast_v7_B.jpg",
+        "sprites": {
+          "selena": "178 см · feet 3 · на пуфе",
+          "reika": "181 см · feet 1 · стоя, руки под грудью",
+          "irene": "176 см · feet 3 · на блоке, босая, стопа к камере",
+          "nova": "172 см · feet 2 · спина, через плечо",
+          "mika": "168 см · feet 2 · у стола, каблук снят",
+          "sora": "160 см · feet 1 · носки вместе, подбородок вверх",
+          "yuna": "158 см · feet 2 · контрапост, бёдра читаются"
+        },
+        "consistency": "регистр один на всех: контур, cel, палитра, один источник контрового света",
+        "known_defect": "у Селены и Айрин в спрайт попал реквизит (пуф / блок). Для игры это лишнее: либо инпейнт реквизита, либо пересборка позы стоя.",
+        "gates": "qa_sprites 15/15 · qa_render 15/15"
+      }
+    }
+  ]
+}

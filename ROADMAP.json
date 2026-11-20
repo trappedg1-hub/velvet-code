@@ -1,0 +1,534 @@
+{
+ "project": "VELVET CODE",
+ "updated": "2026-11-20",
+ "tasks": [
+  {
+   "id": "approve-canon-v1",
+   "title": "Утвердить канон v5",
+   "owner": "human",
+   "status": "done",
+   "depends_on": [],
+   "acceptance": "canon check: 15 элементов approved, export собран",
+   "notes": "Канон утверждён серией до v11/v12; каст v11 принят целиком 20.11.2026."
+  },
+  {
+   "id": "forge-prompts",
+   "title": "Генератор промптов: канон -> батч-паки для ComfyUI",
+   "owner": "agent",
+   "status": "todo",
+   "depends_on": [
+    "approve-canon-v1"
+   ],
+   "acceptance": "out/prompts/<hero>/*.json, детерминированные сиды"
+  },
+  {
+   "id": "rerender-cast-v2",
+   "title": "Перерисовать состав под curvy-спеку (7 героинь)",
+   "owner": "agent",
+   "status": "done",
+   "depends_on": [
+    "approve-canon-v1"
+   ],
+   "acceptance": "7 спрайтов curvy + make qa зелёный",
+   "notes": "Сделано: 7 рендеров переделаны (huge-грудь, бёдра шире плеч, толстые бёдра), кадр починен, QA 8/8 ok."
+  },
+  {
+   "id": "art-batch-v1",
+   "title": "Батч арта: 20 артов на героиню по утверждённому канону",
+   "owner": "agent",
+   "status": "todo",
+   "depends_on": [
+    "forge-prompts"
+   ],
+   "acceptance": "out/renders/<hero>/ + QA-отчёт"
+  },
+  {
+   "id": "qa-consistency",
+   "title": "Авто-QA консистентности (эмбеддинги + правила)",
+   "owner": "agent",
+   "status": "todo",
+   "depends_on": [
+    "art-batch-v1"
+   ],
+   "acceptance": "score >= порога для 90% артов"
+  },
+  {
+   "id": "lora-selena",
+   "title": "LoRA персонажа Селена (55-60 артов)",
+   "owner": "human",
+   "status": "todo",
+   "depends_on": [
+    "art-batch-v1"
+   ],
+   "acceptance": "kohya-прогон, лицо держится на 10 слепых тестах"
+  },
+  {
+   "id": "layers-seethrough",
+   "title": "See-through: спрайт -> PSD 23 слоя",
+   "owner": "human",
+   "status": "todo",
+   "depends_on": [
+    "lora-selena"
+   ],
+   "acceptance": "PSD читается в Cubism"
+  },
+  {
+   "id": "rig-live2d",
+   "title": "Авториг -> .moc3 + доводка в Cubism",
+   "owner": "human",
+   "status": "todo",
+   "depends_on": [
+    "layers-seethrough"
+   ],
+   "acceptance": "363 позы валидны, дрейф стопы < 0.25px"
+  },
+  {
+   "id": "runtime-pixi",
+   "title": "Рантайм: pixi v8 + Live2D + поведенческий слой",
+   "owner": "agent",
+   "status": "todo",
+   "depends_on": [
+    "rig-live2d"
+   ],
+   "acceptance": "60 fps, мигание/дыхание/взгляд из коробки"
+  },
+  {
+   "id": "brain-llm",
+   "title": "Мозг персонажа: карточка + JSON-контракт + память",
+   "owner": "agent",
+   "status": "todo",
+   "depends_on": [
+    "approve-canon-v1"
+   ],
+   "acceptance": "регрессия 50 промптов >= 90% в характере"
+  },
+  {
+   "id": "tts-voice",
+   "title": "Голос: GPT-SoVITS + 200 реплик в Opus + липсинк",
+   "owner": "agent",
+   "status": "todo",
+   "depends_on": [
+    "brain-llm"
+   ],
+   "acceptance": "первый звук < 1.2с, липсинк по амплитуде"
+  },
+  {
+   "id": "economy-loop",
+   "title": "Кор-луп + экономика + аналитика",
+   "owner": "agent",
+   "status": "todo",
+   "depends_on": [
+    "runtime-pixi"
+   ],
+   "acceptance": "сессия 5 мин, все события пишутся"
+  },
+  {
+   "id": "payments-entity",
+   "title": "Юрлицо + эквайер/паблишер",
+   "owner": "human",
+   "status": "todo",
+   "depends_on": [],
+   "acceptance": "тестовый платёж проходит end-to-end"
+  },
+  {
+   "id": "deploy-vercel",
+   "title": "Деплой: Vercel (фронт) + R2 (ассеты)",
+   "owner": "agent",
+   "status": "todo",
+   "depends_on": [
+    "economy-loop"
+   ],
+   "acceptance": "прод-URL, первый кадр < 1.5с"
+  },
+  {
+   "id": "qa-sprites-gate",
+   "title": "Гейт QA спрайтов в CI",
+   "owner": "agent",
+   "status": "todo",
+   "depends_on": [
+    "rerender-cast-v2"
+   ],
+   "acceptance": "make qa падает на обрезанном спрайте",
+   "notes": "tools/qa_sprites.py готов (кадр до трима, альфа, формат, 400 КБ). Подключить шагом в .github/workflows/ci.yml."
+  },
+  {
+   "id": "wildcard-factory",
+   "title": "Промпт-фабрика на wildcard-файлах",
+   "owner": "agent",
+   "status": "todo",
+   "depends_on": [
+    "approve-canon-v1"
+   ],
+   "acceptance": "батч из шаблона без дублей, seed воспроизводим",
+   "notes": "tools/prompt_build.py + assets/wildcards/*.txt работают локально (6 тестов). Дальше: батч-рендер ComfyUI/Anima Turbo с @once-распределением поз."
+  },
+  {
+   "id": "foot-pose-library",
+   "title": "Библиотека фут-поз под ControlNet",
+   "owner": "agent",
+   "status": "todo",
+   "depends_on": [
+    "approve-canon-v1"
+   ],
+   "acceptance": "по 6 скелетов на уровень 3 и 2, промпты валидны",
+   "notes": "feet_poses.txt готов; дальше — OpenPose-скелеты под каждую позу и привязка к уровням героинь."
+  },
+  {
+   "id": "rig-pipeline-eval",
+   "title": "Проверить rig-c / Rigby2D на наших слоях",
+   "owner": "agent",
+   "status": "todo",
+   "depends_on": [
+    "layers-seethrough"
+   ],
+   "acceptance": "один спрайт крутится в Pixi v8 с idle-анимацией",
+   "notes": "Выбор: rig-c (Spine 4.3, играет в Pixi 8) vs Rigby2D (бесплатный, рантаймы PixiJS 8 и Ren'Py)."
+  },
+  {
+   "id": "noobai-vpred-batch",
+   "title": "Сравнить Anima 2B vs NoobAI-XL V-Pred на касте",
+   "owner": "agent",
+   "status": "todo",
+   "depends_on": [
+    "approve-canon-v1"
+   ],
+   "acceptance": "по 3 рендера на героиню, слепое сравнение по фигуре",
+   "notes": "NoobAI: v-pred + Euler, CFG 4–5, 28–35 шагов, 832×1216. Цель — тайлинг-теги читаются точнее."
+  },
+  {
+   "id": "artifact-pipeline",
+   "title": "Подключить ADetailer/FaceDetailer в рендер-ферму",
+   "owner": "agent",
+   "status": "todo",
+   "depends_on": [
+    "rerender-cast-v2"
+   ],
+   "acceptance": "лицо 0.4 / кисти 0.45, ни одного кадра с обрезанной кистью",
+   "notes": "Параметры в canon `artifact-stack`. Наш гейт qa-render уже ловит обрез и ореол."
+  },
+  {
+   "id": "pyiqa-gate",
+   "title": "ML-метрики pyiqa в приёмку",
+   "owner": "agent",
+   "status": "todo",
+   "depends_on": [
+    "artifact-pipeline"
+   ],
+   "acceptance": "MUSIQ/CLIPIQA/TOPIQ-face пороги по касту, отчёт в CI",
+   "notes": "tools/qa_render.py --ml готов, ждёт окружение с torch/pyiqa."
+  },
+  {
+   "id": "heat-dial-shipped",
+   "title": "Шкала горячести L1–L3 как переключатель",
+   "owner": "agent",
+   "status": "done",
+   "depends_on": [],
+   "acceptance": "tools/prompt_forge.py --heat 1|2|3 даёт разный промпт без правки фигуры",
+   "notes": "Готово: 4 семейства моделей (anima/illustrious/pony/flux), тесты в tests/test_prompt_forge.py."
+  },
+  {
+   "id": "tag-db-local",
+   "title": "Локальная база тегов Danbooru с частотами",
+   "owner": "agent",
+   "status": "done",
+   "depends_on": [],
+   "acceptance": "assets/tags/*.csv + tools/tag_db.py --search/--top/--export",
+   "notes": "10 109 тегов в 5 категориях; wildcards пересобраны из реальных данных."
+  },
+  {
+   "id": "arena-task-gen",
+   "title": "Генератор самодостаточных задач агенту",
+   "owner": "agent",
+   "status": "done",
+   "depends_on": [],
+   "acceptance": "tools/arena_task.py создаёт tasks/arena/*.md с промптом, критериями и запретами",
+   "notes": "Канон `arena-prompting`. Задачи собираются из карточки+канона+форжа, не пишутся руками."
+  },
+  {
+   "id": "text-ocr-gate",
+   "title": "OCR-гейт: надписи и логотипы в кадре",
+   "owner": "agent",
+   "status": "todo",
+   "depends_on": [
+    "artifact-pipeline"
+   ],
+   "acceptance": "на машине с tesseract любой кадр с 3+ словами текста валит приёмку; без OCR — info:text-skip",
+   "notes": "Код готов (tools/qa_render.py::check_text). Пойман реальный брак: табличка «41 KIM YUNA, HEIGHT 168cm» на рендере Рэйки."
+  },
+  {
+   "id": "pose-library-coco18",
+   "title": "Библиотека поз COCO-18 на 7 героинь × 5 слотов",
+   "owner": "agent",
+   "status": "todo",
+   "depends_on": [
+    "heat-dial-shipped"
+   ],
+   "acceptance": "assets/pose/<heroine>_<slot>.json для idle|ntr|foot|seated|shoulder, ControlNet держит позу при weight 0.8–1.0",
+   "notes": "Канон `pose-library`. Формат из ComfyUI-OpenPose-Studio: 18 точек + canvas_width/height."
+  },
+  {
+   "id": "lora-style-ab",
+   "title": "A/B силы манхва-LoRA 0.75 / 0.85 / 1.0 / без",
+   "owner": "agent",
+   "status": "todo",
+   "depends_on": [],
+   "acceptance": "выбор силы записан в канон style-dna.lora_strength с обоснованием по 4 критериям",
+   "notes": "Задача генерируется: python3 tools/arena_task.py --heroine selena --kind style."
+  },
+  {
+   "id": "l3-channel-decision",
+   "title": "Решение по L3-каналу (платёжка, модерация)",
+   "owner": "human",
+   "status": "blocked",
+   "depends_on": [
+    "heat-dial-shipped"
+   ],
+   "acceptance": "решение владельца: нужен ли отдельный age-gated канал и на какой платёжке",
+   "notes": "Техника готова (уровень L3 в форже). Вопрос денег и юрисдикции, не рендера."
+  },
+  {
+   "id": "style-registers",
+   "title": "Стиль как параметр: три регистра",
+   "owner": "agent",
+   "status": "done",
+   "depends_on": [],
+   "acceptance": "--style ink-panel|manhwa-color|webtoon-drama даёт разные якоря и негативы",
+   "notes": "v6 отклонён владельцем; конфликтующие теги вычищаются STYLE_VETO. Бюллетень: assets/concept/_style_ballot.jpg"
+  },
+  {
+   "id": "prompt-corpus",
+   "title": "Корпус реальных промптов + фингерпринт",
+   "owner": "agent",
+   "status": "done",
+   "depends_on": [],
+   "acceptance": "assets/prompts/*.jsonl + fingerprint.json, частоты по блокам качества и негатива",
+   "notes": "2481 строка из jtatman/...-uncensored (MIT). Civiverse/Civitai-2m отдают 500 — зафиксировано."
+  },
+  {
+   "id": "nsfw-atlas",
+   "title": "Атлас явной лексики с частотами",
+   "owner": "agent",
+   "status": "done",
+   "depends_on": [],
+   "acceptance": "assets/tags/atlas.json + wildcards, у каждого термина реальная частота",
+   "notes": "8 групп. presenting foot = 3317 → фут-кадр держим позой, а не тегом."
+  },
+  {
+   "id": "manga-grammar",
+   "title": "Грамматика манга-панели в композицию",
+   "owner": "agent",
+   "status": "done",
+   "depends_on": [],
+   "acceptance": "6 приёмов (spot black, screentone, speed lines, slant, bleed, eye line) в каноне и промпте",
+   "notes": "Manga109: 109 томов, 21 142 страницы, 103 900 панелей. Лицензия — справочник приёмов."
+  },
+  {
+   "id": "arena-tournament",
+   "title": "Турнирный пакет для агентов",
+   "owner": "agent",
+   "status": "done",
+   "depends_on": [],
+   "acceptance": "task.md+rubric.md+cards.md+baseline.md генерируются из канона и карточки",
+   "notes": "tool: --kind tournament. Слепой судья, fatal не выигрывает."
+  },
+  {
+   "id": "pick-style-register",
+   "title": "Выбрать регистр A или B",
+   "owner": "human",
+   "status": "done",
+   "depends_on": [
+    "style-registers"
+   ],
+   "acceptance": "названа буква регистра — он становится дефолтом и каст пересобирается",
+   "notes": "Владелец выбрал B (manhwa-color). Каст из 7 пересобран, 15/15 спрайтов прошли гейт."
+  },
+  {
+   "id": "anime-corpus-topup",
+   "title": "Добрать anime-корпус промптов",
+   "owner": "agent",
+   "status": "todo",
+   "depends_on": [
+    "prompt-corpus"
+   ],
+   "acceptance": "корпус содержит >1000 anime/manhwa-промптов, фингерпринт пересчитан",
+   "notes": "datasets-server отдаёт 500 на Civiverse/Civitai-2m; путь — прямой parquet или другой источник."
+  },
+  {
+   "id": "cast-v7-B",
+   "title": "Пересборка каста в регистре B",
+   "owner": "agent",
+   "status": "done",
+   "depends_on": [
+    "pick-style-register"
+   ],
+   "acceptance": "7 спрайтов в одном регистре, истинный масштаб, гейты пройдены",
+   "notes": "assets/sprite/_cast_v7_B.jpg · 15/15 qa_sprites и qa_render"
+  },
+  {
+   "id": "prop-inpaint",
+   "title": "Убрать реквизит из спрайтов Селены и Айрин",
+   "owner": "human",
+   "status": "blocked",
+   "depends_on": [
+    "cast-v7-B"
+   ],
+   "acceptance": "выбрано: инпейнт реквизита или пересборка позы стоя; после — гейт заново",
+   "notes": "пуф (Селена) и блок (Айрин) попали в спрайт; для игры это лишний объект."
+  },
+  {
+   "id": "cast-l2plus",
+   "title": "Поднять горячесть выбранным героиням до L2+",
+   "owner": "human",
+   "status": "blocked",
+   "depends_on": [
+    "cast-v7-B"
+   ],
+   "acceptance": "названы героини (Селена / Рэйка / Нова?) и уровень; кадры пересобраны и прогнаны",
+   "notes": "Сейчас все на L2 в рамках одежды."
+  },
+  {
+   "id": "pipeline-manifest-fix",
+   "title": "Починить пайплайн: аргументы и манифест",
+   "owner": "agent",
+   "status": "done",
+   "depends_on": [],
+   "acceptance": "pipeline_sprites.py принимает имена, не затирает манифест, есть --reindex",
+   "notes": "Найден баг: скрипт игнорировал --name и перезаписывал manifest.json двумя записями."
+  },
+  {
+   "id": "foot-anatomy-spec",
+   "title": "Стопа: спецификация и валидатор",
+   "owner": "agent",
+   "status": "done",
+   "depends_on": [],
+   "acceptance": "foot_spec.py: пропорции, ракурсы, промпт-блоки, check(); форж подставляет анатомию, позы в карточках исправлены",
+   "notes": "«Ласта» — следствие ракурса «подошвой в камеру», а не ошибки модели. Ракурс запрещён, негатив усилен."
+  },
+  {
+   "id": "style-register-hentai",
+   "title": "Регистр hentai-render как дефолт",
+   "owner": "agent",
+   "status": "done",
+   "depends_on": [],
+   "acceptance": "тонкая линия + мягкий градиент + насыщенная красно-фиолетовая тень + глянцевый блик; комикс-негатив в форже",
+   "notes": "Регистр B отклонён как комикс: стиль задают характер линии и тени, а не толщина контура."
+  },
+  {
+   "id": "arena-loop-integration",
+   "title": "Турнирный движок подключён в репозиторий",
+   "owner": "agent",
+   "status": "done",
+   "depends_on": [],
+   "acceptance": "vendor/arena-skill (MIT) + automation/arena_loop.py (plan/init/next/status/winner) + make arena-*",
+   "notes": "Задача и baseline собираются из канона: турнир нельзя запустить без карточки героини."
+  },
+  {
+   "id": "docs-15-research",
+   "title": "Документ по регистру и стопе",
+   "owner": "agent",
+   "status": "done",
+   "depends_on": [],
+   "acceptance": "docs/15-hentai-render-research.md: диагноз «комикса», анатомия стопы, GitHub-стек, Arena agent mode",
+   "notes": "Внешний ресёрч с конкретными источниками и дескрипторами, пригодными для промпта."
+  },
+  {
+   "id": "boldness-arena",
+   "title": "Арена откровенности: измеримая смелость",
+   "owner": "agent",
+   "status": "done",
+   "depends_on": [],
+   "acceptance": "boldness.py: 5 рычагов, 6 ступеней, потолок 164, жёсткие пределы, rank(); --kind boldness в arena_loop",
+   "notes": "Калибровка по своим промптам: heat1 19–54, heat2 94–144. Победитель — самый смелый из прошедших потолок."
+  },
+  {
+   "id": "foot-petite-scale",
+   "title": "Стопы меньше + фут-эстетика",
+   "owner": "agent",
+   "status": "done",
+   "depends_on": [],
+   "acceptance": "0.75–0.85 головы; petite feet, high arch, long slender toes, groomed toenails; негатив на large/broad feet",
+   "notes": "Работает силуэт и раскрытие, а не кадр подошвы; крупная стопа читается как мужская."
+  },
+  {
+   "id": "filter-audit",
+   "title": "Аудит блокировщиков в своём пайплайне",
+   "owner": "agent",
+   "status": "done",
+   "depends_on": [],
+   "acceptance": "filter_audit.py: safety_checker, watermark, NSFW-узел, пост-цензура, clip skip; --recipe",
+   "notes": "Hosted-сервисы не обходим (ToS и потеря аккаунта), владеем локальным стеком: фильтр там opt-in."
+  },
+  {
+   "id": "seart-research",
+   "title": "Механика SeaArt разобрана",
+   "owner": "agent",
+   "status": "done",
+   "depends_on": [],
+   "acceptance": "docs/16: стек моделей + LoRA + узлы, identity lock на 20–30 кадрах, возрастной гейт аккаунта",
+   "notes": "Копируем витрину: LoRA персонажа, компаундинг, узловая сборка — без аренды чужого модератора."
+  },
+  {
+   "id": "fabric-physics",
+   "title": "Ткань как физика в промптах",
+   "owner": "agent",
+   "status": "done",
+   "depends_on": [],
+   "acceptance": "fabric.py: 15 материалов со светом и движением, 4 поведения (cling/sheer/tear/wet), негатив на пластик",
+   "notes": "«silk dress» даёт пластик; поведение задаётся натяжением, светом сквозь волокно и физикой разрыва."
+  },
+  {
+   "id": "negative-sabotage",
+   "title": "Аудит негативного промпта",
+   "owner": "agent",
+   "status": "done",
+   "depends_on": [],
+   "acceptance": "neg_audit.py: словарь саботажников, индекс, чистка без потери анти-цензуры, скан корпуса, проверка эмбеддингов",
+   "notes": "Негатив в SD вычитает понятие: nsfw/nude глушат кожу. Наши негативы: индекс 0."
+  },
+  {
+   "id": "maturity-gate",
+   "title": "Green / Mature как гейт пайплайна",
+   "owner": "agent",
+   "status": "done",
+   "depends_on": [],
+   "acceptance": "maturity.py: режимы, возрастной гейт, потолки, ярлыки ассетов; форж режет heat в green",
+   "notes": "Работа идёт только в mature: heat ≤ 3, смелость ≤ 200, выше B2+ — подписанный кадр."
+  },
+  {
+   "id": "cast-v11",
+   "title": "Каст v11 без фона в режиме mature",
+   "owner": "agent",
+   "status": "done",
+   "depends_on": [],
+   "acceptance": "7 спрайтов m_* на хромакее, ткань по карточкам, petite feet; qa_sprites 22/22, qa_render 29/29",
+   "notes": "Лист _cast_mature_v11.jpg в истинном масштабе. Нова светлее канона — на правку."
+  },
+  {
+   "id": "rig-anchors-tool",
+   "title": "Якоря скелета по силуэту",
+   "owner": "agent",
+   "status": "done",
+   "depends_on": [],
+   "acceptance": "rig_anchors.py: плечи/бёдра по ширине, талия по минимуму, колени по доле; якоря в манифесте сохраняются при реиндексе",
+   "notes": "Точки нужны рантайму и будущему ригу; «на глаз» в коде — значит переделывать каждый кадр."
+  },
+  {
+   "id": "slice-seven",
+   "title": "Вертикальный срез на семь героинь",
+   "owner": "agent",
+   "status": "done",
+   "depends_on": [],
+   "acceptance": "build_slice.py → prototype/index.html: 733 КБ, 0 внешних, истинный масштаб, Green/Mature гейт, доверие и реплики",
+   "notes": "Спрайты base64, режим mature за подтверждением 18+, якоря в подвале сцены."
+  },
+  {
+   "id": "cast-v11-approve",
+   "title": "Каст v11 утверждён, Нова и Айрин пересняты",
+   "owner": "agent",
+   "status": "done",
+   "depends_on": [],
+   "acceptance": "tan skin у Новы, читаемая стопа у Айрин; qa_sprites 22/22, qa_render 29/29, pytest 103",
+   "notes": "Утверждение получено целиком; правки внесены по расхождениям с каноном, а не по вкусу."
+  }
+ ]
+}

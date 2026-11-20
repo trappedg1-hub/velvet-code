@@ -1,0 +1,33 @@
+{
+ "mode": "mature",
+ "age_verified": true,
+ "verified_at": "2026-11-20T10:17:00",
+ "ceiling": {
+  "green": {
+   "heat": 1,
+   "boldness": 74
+  },
+  "mature": {
+   "heat": 3,
+   "boldness": 200
+  }
+ },
+ "history": [
+  {
+   "at": "2026-11-20T10:17:00",
+   "event": "age_verified"
+  },
+  {
+   "at": "2026-11-20T10:17:00",
+   "event": "mode=mature"
+  },
+  {
+   "at": "2026-11-20T10:17:00",
+   "event": "mode=green"
+  },
+  {
+   "at": "2026-11-20T10:20:47",
+   "event": "mode=mature"
+  }
+ ]
+}
