@@ -232,8 +232,14 @@ ankle / feet **1198**; ширина плеч > 60 px. Правило: плечи
 
 ## 11. Репозиторий
 
-Ветка `main`. Аккаунт владельца: **trappedg1-hub**. Репозиторий создаёт человек
-(fine-grained токен этого не может) → потом:
+**Репозиторий: https://github.com/trappedg1-hub/velvet-code**, ветка `main`, публичный
+(владелец выбрал публичность осознанно). Аккаунт владельца: **trappedg1-hub**.
+
+Проверено на практике: fine-grained токен **не создаёт** репозитории (403 на `POST /user/repos`)
+и **не видит** репозитории, созданные после его выдачи. Пуш заработал только когда владелец
+добавил репозиторий в *Repository access* и выдал **Contents: Read and write** +
+**Workflows: Read and write** (без второго GitHub отклоняет push, если в коммите есть
+`.github/workflows/`). Команды:
 
 ```bash
 GH_TOKEN=<fine-grained-token> tools/push_github.sh <user>/<repo> --check

@@ -235,12 +235,9 @@ e30a9a5 ассеты: утверждённый каст v11 и вертикал�
 8b8e048 база: карточки героинь, канон v12 (46 элементов), правила, очередь
 ```
 
-Ветка `main`, рабочее дерево чистое, `.git` весит 12 МБ. Нужен только адрес:
-
-```bash
-git remote add origin https://github.com/<USER>/<REPO>.git
-git push -u origin main
-```
+**Живой репозиторий: https://github.com/trappedg1-hub/velvet-code** (ветка `main`, 10 коммитов,
+`.git` 12 МБ, рабочее дерево чистое). Пуш из песочницы работает: соединение по HTTPS открыто,
+коннектор не нужен.
 
 Пароль — **personal access token** (Settings → Developer settings → Personal access tokens,
 права `repo`), не пароль от аккаунта.
