@@ -12,14 +12,22 @@ jobs:
       - uses: actions/setup-python@v5
         with: { python-version: "3.13" }
       - name: deps
-        run: pip install pytest pillow numpy
+        run: pip install pytest pillow numpy opencv-python-headless
       - name: tests
         run: python3 -m pytest tests -q
+      - name: sprite + render gates
+        run: |
+          python3 tools/qa_sprites.py
+          python3 tools/qa_render.py
+      - name: negative prompt audit
+        run: python3 tools/neg_audit.py --check "lowres, nsfw, nude" && echo "аудит работает"
+      - name: blockers audit
+        run: python3 -m automation.filter_audit --audit
       - name: canon gate
         # утверждённый канон не должен расходиться с данными
         run: python3 -m automation.canon check
       - name: review artifact builds
-        run: python3 -m automation.canon render
+        run: python3 automation/review.py
       - name: prototype js syntax
         run: |
           python3 - <<'PY'
@@ -45,4 +53,4 @@ jobs:
           sys.exit(1 if bad else 0)
           PY
       - uses: actions/upload-artifact@v4
-        with: { name: canon-review, path: review/canon-v1.html }
+        with: { name: canon-review, path: review/canon-v11.html }

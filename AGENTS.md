@@ -1,5 +1,8 @@
 # AGENTS.md — инструкция для любого кодинг-агента
 
+> **Сначала прочитай `HANDOFF.md`** — там вся история решений: что утверждено, что отклонено
+> и почему, какие инструменты есть, какие тупики не надо повторять.
+
 Проект: **VELVET CODE** — браузерная игра в жанре эччи/hot-fanservice (манхва-стилистика).
 Стек: Python 3.13 (фабрика контента) + статический HTML/JS (прототип) → далее Next.js.
 Пакетный менеджер: **нет** (Python stdlib + PIL/numpy/pytest). Не добавляй зависимости без разрешения.
@@ -11,6 +14,10 @@ make test          # pytest tests -q  — обязано быть зелёным
 make canon-check   # гейт: утверждённый канон не разошёлся. Ненулевой код = СТОП
 make canon-render  # пересобрать review/canon-v1.html (лист на утверждение)
 make sync          # подтянуть canon/source/*.json в реестр
+make slice         # якоря скелета + пересборка prototype/index.html
+make mature        # состояние режима Green/Mature (рабочий — mature)
+make repair        # лечение артефактов хромакея по всем сырым кадрам
+make neg           # аудит негативного промпта на слова-саботажники
 make probe         # диагностика подключения к «мозгу» (ArenaAgentBridge / mock)
 python3 -m automation.canon list --status draft   # что ждёт утверждения
 ```
