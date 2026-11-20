@@ -238,6 +238,17 @@ git push -u origin main
 Пароль — **personal access token** (Settings → Developer settings → Personal access tokens,
 права `repo`), не пароль от аккаунта.
 
+**GitHub-коннектора у агента нет**, но сеть в песочнице открыта, поэтому пуш делается по токену:
+
+```bash
+GH_TOKEN=<fine-grained-token> tools/push_github.sh <user>/<repo> --check
+GH_TOKEN=<fine-grained-token> tools/push_github.sh <user>/<repo>
+```
+
+Скрипт проверяет доступ через API, пушит `main`, затем **перезаписывает remote на чистый URL**,
+чтобы токен не остался в `.git/config`. Право токена — только `Contents: Read and write`
+на один репозиторий, срок минимальный, после работы отозвать.
+
 **Если пушить нечем прямо сейчас** — рядом лежит `velvet-code.bundle` (полная история одним
 файлом, 11 МБ). Другой агент/машина поднимает проект так:
 
