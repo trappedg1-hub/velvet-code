@@ -1,0 +1,60 @@
+low quality
+worst quality
+bad anatomy
+blurry
+normal quality
+watermark
+text
+lowres
+signature
+cropped
+ugly
+bad hands
+monochrome
+jpeg artifacts
+deformed
+disfigured
+error
+username
+missing fingers
+extra limbs
+easynegative
+extra fingers
+mutation
+extra digit
+poorly drawn hands
+poorly drawn face
+fewer digits
+extra legs
+grayscale
+out of frame
+extra arms
+mutated hands
+bad proportions
+fused fingers
+long neck
+duplicate
+cartoon
+mutated
+missing arms
+ng_deepnegative_v1_75t
+artist name
+3d
+logo
+too many fingers
+missing legs
+gross proportions
+malformed limbs
+sketches
+bad-hands-5
+loli
+skin blemishes
+mutilated
+skin spots
+acnes
+bad art
+cloned face
+child
+bad_prompt_version2
+badhandv4
+sketch

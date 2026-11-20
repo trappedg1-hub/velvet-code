@@ -1,0 +1,40 @@
+detailed skin
+highly detailed
+perfect lighting
+<lora:tinkerbellpeterpan_v10>
+realistic original
+realistic
+detailed
+ultra-detailed
+<lora:squeezerexperimental_>
+intricate details
+hyper-realistic digital illustration
+hyper intricate fine detail
+highly detailed cg illustration
+realistic8k uhd
+high-quality texture
+detailed texture
+finely detailed
+high detail
+extremely detailed cg
+high-quality shadow
+a realistic representation of the face
+detailed beautiful delicate face
+detailed beautiful delicate eyes
+cinematic light
+illustration
+detailed fingers
+beautiful detailed eyes
+bracelets
+detailed background
+intricate detailed
+hyperrealistic
+<lora:add_detail>
+deep shadow
+photorealistic
+bracelet
+extremely detailed face
+light plump
+sunlight
+rim lighting
+photo-realistic

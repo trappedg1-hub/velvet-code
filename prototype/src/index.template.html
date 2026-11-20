@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>VELVET CODE — vertical slice</title>
+<style>
+  :root{
+    --bg:#0b0710; --bg2:#140d1e;
+    --rose:#ff6fa5; --rose-dim:#c94a7d;
+    --violet:#9b6cff; --cyan:#5eead4;
+    --gold:#ffcf6b;
+    --ink:#f4ecf7; --ink-dim:#b9a9c8;
+    --glass:rgba(255,255,255,.055);
+    --stroke:rgba(255,255,255,.12);
+    --r:18px;
+    --shadow:0 24px 60px -20px rgba(0,0,0,.85);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    margin:0; background:
+      radial-gradient(1100px 700px at 78% -10%, #2a1436 0%, transparent 60%),
+      radial-gradient(900px 600px at 5% 105%, #17203a 0%, transparent 62%),
+      linear-gradient(160deg,#0b0710, #100a17 55%, #0a0710);
+    color:var(--ink);
+    font:15px/1.5 ui-sans-serif,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+    overflow:hidden;
+  }
+  button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+  .app{
+    height:100dvh; display:grid;
+    grid-template-columns:minmax(320px,1fr) 430px;
+    gap:0;
+  }
+
+  /* ---------- STAGE ---------- */
+  .stage-wrap{position:relative; overflow:hidden; display:flex; align-items:flex-end; justify-content:center}
+  .stage{position:absolute; inset:0; overflow:hidden}
+
+  /* procedural背景: no external assets */
+  .bg{position:absolute; inset:-6%; transition:filter 1.2s ease, opacity 1.2s ease}
+  .bg .wall{position:absolute; inset:0;
+    background:
+      radial-gradient(60% 45% at 50% 12%, rgba(155,108,255,.30), transparent 70%),
+      linear-gradient(180deg,#150e21 0%, #1a1128 40%, #0e0a16 100%);
+  }
+  .bg .glow{position:absolute; width:120%; aspect-ratio:1; border-radius:50%;
+    background:radial-gradient(circle, var(--rose-dim) 0%, transparent 62%);
+    opacity:.20; filter:blur(50px); left:-10%; top:-28%;
+    transition:background 1.4s ease, opacity 1.4s ease;
+  }
+  .bg .panels{position:absolute; inset:0; opacity:.5}
+  .bg .panels i{position:absolute; display:block; border-radius:6px;
+    background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.02));
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.07)}
+  .bg .panels i::after{content:""; position:absolute; inset:14%; border-radius:3px;
+    background:linear-gradient(180deg, rgba(155,108,255,.28), rgba(94,234,212,.10)); opacity:.5}
+  .bg .floor{position:absolute; left:-10%; right:-10%; bottom:0; height:32%;
+    background:linear-gradient(180deg, transparent, rgba(0,0,0,.75));
+  }
+  .bg .floor::before{content:""; position:absolute; inset:0;
+    background:repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 1px, transparent 1px 46px);
+    transform:perspective(340px) rotateX(62deg); transform-origin:top; opacity:.5}
+
+  /* heroine */
+  .heroine-rig{
+    position:absolute; bottom:19%; left:50%; height:80%;
+    transform:translateX(-50%);
+    display:flex; align-items:flex-end; justify-content:center;
+    transition:filter .9s ease, transform .5s cubic-bezier(.22,1,.36,1);
+    will-change:transform;
+  }
+  .heroine{
+    position:relative; height:100%;
+    filter:drop-shadow(0 30px 44px rgba(0,0,0,.72)) drop-shadow(0 0 26px rgba(255,111,165,.16));
+    transition:filter .8s ease, opacity .45s ease;
+    animation:breathe 5.4s ease-in-out infinite;
+    will-change:transform, filter;
+  }
+  .heroine img{height:100%; width:auto; display:block; user-select:none; -webkit-user-drag:none; pointer-events:none}
+  .heroine.swap{opacity:0; transform:translateY(14px) scale(.985)}
+  @keyframes breathe{
+    0%,100%{transform:translateY(0) scaleY(1) scaleX(1)}
+    50%{transform:translateY(-.42%) scaleY(1.008) scaleX(.997)}
+  }
+  .heroine.jolt{animation:jolt .42s cubic-bezier(.3,1.6,.5,1)}
+  @keyframes jolt{
+    0%{transform:translate(0,0) rotate(0)}
+    28%{transform:translate(-1.1%,-1%) rotate(-1.1deg)}
+    58%{transform:translate(.9%,-.4%) rotate(.8deg)}
+    100%{transform:translate(0,0) rotate(0)}
+  }
+
+  /* gaze / rim light */
+  .rim{position:absolute; inset:0; pointer-events:none; mix-blend-mode:screen; opacity:.55;
+    background:radial-gradient(38% 22% at var(--gx,50%) var(--gy,22%), rgba(255,190,220,.30), transparent 70%);}
+
+  /* hit zones */
+  .zones{position:absolute; inset:0}
+  .zone{position:absolute; border-radius:999px; cursor:pointer;
+    outline:0; border:0;
+    background:transparent;
+    transition:background .18s ease, box-shadow .18s ease;
+  }
+  .zone:focus-visible{background:rgba(255,255,255,.10); box-shadow:0 0 0 2px var(--rose)}
+  .zone.hint{background:radial-gradient(circle, rgba(255,111,165,.22), transparent 72%)}
+  .float{position:absolute; font-weight:800; font-size:15px; letter-spacing:.02em;
+    pointer-events:none; text-shadow:0 2px 12px rgba(0,0,0,.8); animation:floatUp 1.15s ease-out forwards}
+  @keyframes floatUp{
+    0%{opacity:0; transform:translate(-50%,0) scale(.8)}
+    18%{opacity:1; transform:translate(-50%,-10px) scale(1.06)}
+    100%{opacity:0; transform:translate(-50%,-64px) scale(1)}
+  }
+
+  /* hearts */
+  .fx{position:absolute; inset:0; pointer-events:none; overflow:hidden}
+  .heart{position:absolute; font-size:18px; color:var(--rose); filter:drop-shadow(0 0 8px rgba(255,111,165,.8));
+    animation:rise 2.6s ease-out forwards}
+  @keyframes rise{
+    0%{opacity:0; transform:translate(0,0) scale(.6) rotate(0)}
+    15%{opacity:.95}
+    100%{opacity:0; transform:translate(var(--dx,0px),-220px) scale(1.15) rotate(var(--dr,20deg))}
+  }
+
+  /* top hud over stage */
+  .hud-top{position:absolute; top:0; left:0; right:0; padding:14px 16px;
+    display:flex; gap:10px; align-items:center; z-index:6;
+    background:linear-gradient(180deg, rgba(8,5,14,.78), transparent)}
+  .pill{display:inline-flex; align-items:center; gap:8px; padding:7px 12px; border-radius:999px;
+    background:var(--glass); border:1px solid var(--stroke); backdrop-filter:blur(14px);
+    font-size:13px; font-weight:600; white-space:nowrap}
+  .pill .dot{width:7px;height:7px;border-radius:50%;background:var(--cyan); box-shadow:0 0 10px var(--cyan)}
+  .spacer{flex:1}
+
+  /* VN dialogue */
+  .vn{position:absolute; left:0; right:0; bottom:0; z-index:7; padding:14px 16px 16px;
+    background:linear-gradient(180deg, transparent, rgba(6,4,10,.90) 34%)}
+  .vn-box{position:relative; border-radius:var(--r); border:1px solid var(--stroke);
+    background:linear-gradient(180deg, rgba(24,15,34,.90), rgba(12,8,18,.94));
+    box-shadow:var(--shadow); padding:14px 16px 12px; backdrop-filter:blur(16px)}
+  .vn-name{display:flex; align-items:center; gap:8px; margin-bottom:6px}
+  .vn-name b{font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--rose)}
+  .mood-tag{font-size:11px; padding:2px 8px; border-radius:999px; border:1px solid var(--stroke);
+    color:var(--ink-dim); letter-spacing:.06em; text-transform:uppercase}
+  .vn-text{min-height:52px; font-size:15.5px; line-height:1.55; color:#f7eefb}
+  .vn-text .cur{display:inline-block; width:8px; background:var(--rose); animation:blink .9s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  .choices{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
+  .choice{padding:8px 13px; border-radius:12px; border:1px solid rgba(255,111,165,.35);
+    background:linear-gradient(180deg, rgba(255,111,165,.16), rgba(255,111,165,.06));
+    font-size:13.5px; transition:.16s ease}
+  .choice:hover{background:rgba(255,111,165,.28); transform:translateY(-1px)}
+
+  /* ---------- SIDE PANEL ---------- */
+  .panel{position:relative; display:flex; flex-direction:column; min-height:0;
+    border-left:1px solid var(--stroke);
+    background:linear-gradient(180deg, rgba(16,11,24,.92), rgba(9,6,14,.96));
+    backdrop-filter:blur(18px)}
+  .tabs{display:flex; gap:6px; padding:14px 14px 0}
+  .tab{flex:1; padding:9px 6px; border-radius:11px; font-size:12.5px; font-weight:700; letter-spacing:.04em;
+    color:var(--ink-dim); border:1px solid transparent; transition:.16s ease}
+  .tab[aria-selected="true"]{color:var(--ink); background:var(--glass); border-color:var(--stroke)}
+  .tab:hover{color:var(--ink)}
+  .pane{flex:1; overflow:auto; padding:14px; min-height:0; scrollbar-width:thin}
+  .pane[hidden]{display:none}
+  .pane::-webkit-scrollbar{width:8px}
+  .pane::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14); border-radius:9px}
+
+  .card{border-radius:16px; border:1px solid var(--stroke); background:var(--glass); padding:13px 14px; margin-bottom:10px}
+  .card h4{margin:0 0 9px; font-size:11.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-dim); font-weight:700}
+  .row{display:flex; align-items:center; gap:9px; margin:7px 0; font-size:13px}
+  .row .k{flex:1; color:var(--ink-dim)}
+  .row .v{font-weight:700; font-variant-numeric:tabular-nums}
+  .bar{height:7px; border-radius:99px; background:rgba(255,255,255,.10); overflow:hidden; flex:2}
+  .bar i{display:block; height:100%; border-radius:99px; transition:width .5s cubic-bezier(.22,1,.36,1);
+    background:linear-gradient(90deg,var(--rose-dim),var(--rose))}
+
+  .hero-pick{display:flex; gap:9px; margin-bottom:10px}
+  .hero-pick button{flex:1; border-radius:14px; overflow:hidden; border:1px solid var(--stroke);
+    background:var(--glass); padding:8px; text-align:center; transition:.18s ease}
+  .hero-pick button[aria-pressed="true"]{border-color:rgba(255,111,165,.65); box-shadow:0 0 0 1px rgba(255,111,165,.35), 0 10px 26px -14px rgba(255,111,165,.7)}
+  .hero-pick .thumb{width:100%; height:56px; border-radius:10px; margin-bottom:6px; position:relative; overflow:hidden;
+    background:radial-gradient(circle at 50% 30%, #2b1b3f, #120b1b)}
+  .hero-pick img{height:150%; position:absolute; left:50%; top:4%; transform:translateX(-50%)}
+  .hero-pick span{font-size:12px; font-weight:700}
+
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+  .skin{border-radius:14px; border:1px solid var(--stroke); background:var(--glass); padding:9px;
+    text-align:left; transition:.18s ease; position:relative; overflow:hidden}
+  .skin:hover{transform:translateY(-2px); border-color:rgba(255,255,255,.24)}
+  .skin .cap{height:64px; border-radius:9px; margin-bottom:7px;
+    background:radial-gradient(circle at 50% 20%, #3a2352, #140d1e); display:flex; align-items:center; justify-content:center; font-size:20px}
+  .skin b{font-size:12.5px; display:block}
+  .skin small{color:var(--ink-dim); font-size:11px}
+  .skin.locked{opacity:.62}
+  .skin.owned{border-color:rgba(94,234,212,.45)}
+  .skin .price{position:absolute; right:8px; top:8px; font-size:10.5px; font-weight:800; color:var(--gold);
+    background:rgba(0,0,0,.45); padding:2px 7px; border-radius:99px; border:1px solid rgba(255,207,107,.35)}
+
+  .log{font-size:12.5px; color:var(--ink-dim); line-height:1.6}
+  .log b{color:var(--ink)}
+  .log .t{color:rgba(255,255,255,.32); font-variant-numeric:tabular-nums; margin-right:6px}
+
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12px;
+    background:rgba(255,255,255,.07); padding:1px 5px; border-radius:5px}
+  a{color:var(--cyan); text-decoration:none; border-bottom:1px dotted rgba(94,234,212,.5)}
+  .tiny{font-size:11.5px; color:var(--ink-dim); line-height:1.55}
+  .btn{display:inline-flex; align-items:center; gap:7px; padding:9px 13px; border-radius:12px;
+    border:1px solid var(--stroke); background:var(--glass); font-size:13px; font-weight:700; transition:.16s ease}
+  .btn:hover{background:rgba(255,255,255,.12)}
+  .btn.primary{background:linear-gradient(180deg, rgba(255,111,165,.9), rgba(201,74,125,.85)); border-color:transparent; color:#1a0710}
+  .btn.primary:hover{filter:brightness(1.08)}
+  .btn:disabled{opacity:.45; cursor:not-allowed}
+
+  .toast{position:fixed; left:50%; bottom:26px; transform:translateX(-50%);
+    padding:10px 16px; border-radius:12px; background:rgba(20,12,30,.96); border:1px solid var(--stroke);
+    font-size:13px; font-weight:600; box-shadow:var(--shadow); z-index:60;
+    opacity:0; pointer-events:none; transition:opacity .3s ease, transform .3s ease}
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(-6px)}
+
+  .badge{font-size:10px; letter-spacing:.1em; text-transform:uppercase; padding:2px 7px; border-radius:99px;
+    background:rgba(94,234,212,.14); color:var(--cyan); border:1px solid rgba(94,234,212,.3); font-weight:800}
+  .badge.mock{background:rgba(255,207,107,.14); color:var(--gold); border-color:rgba(255,207,107,.3)}
+
+  /* свободный ввод — точка подключения реального LLM */
+  .sayform{display:flex; gap:8px; margin-top:10px}
+  .sayform input{
+    flex:1; min-width:0; padding:10px 13px; border-radius:12px; font:inherit; font-size:13.5px;
+    color:var(--ink); background:rgba(255,255,255,.06); border:1px solid var(--stroke); outline:0}
+  .sayform input::placeholder{color:rgba(255,255,255,.32)}
+  .sayform input:focus{border-color:rgba(255,111,165,.55); box-shadow:0 0 0 3px rgba(255,111,165,.13)}
+  .sayform button{padding:10px 15px}
+
+  @media (max-width:900px){
+    .app{grid-template-columns:1fr; grid-template-rows:1fr auto}
+    .panel{border-left:0; border-top:1px solid var(--stroke); max-height:44dvh}
+    .heroine-rig{height:72%; bottom:26%}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .heroine{animation:none} .heart,.float{animation-duration:.01ms}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ============ STAGE ============ -->
+  <section class="stage-wrap" id="stageWrap">
+    <div class="stage" id="stage">
+      <div class="bg" id="bg">
+        <div class="wall"></div>
+        <div class="glow" id="glow"></div>
+        <div class="panels" aria-hidden="true">
+          <i style="left:6%;  top:8%;  width:16%; height:34%"></i>
+          <i style="left:26%; top:4%;  width:11%; height:26%"></i>
+          <i style="right:8%; top:10%; width:20%; height:40%"></i>
+          <i style="right:32%;top:6%;  width:9%;  height:22%"></i>
+        </div>
+        <div class="floor"></div>
+      </div>
+
+      <div class="heroine-rig" id="rig">
+        <div class="heroine" id="heroine">
+          <img id="sprite" alt="Героиня" src="__SELENA__">
+          <div class="rim" id="rim"></div>
+          <div class="zones" id="zones"></div>
+        </div>
+      </div>
+      <div class="fx" id="fx"></div>
+
+      <div class="hud-top">
+        <span class="pill"><span class="dot"></span><span id="clock">—</span></span>
+        <span class="pill">🪙 <b id="coins">0</b></span>
+        <span class="pill" title="Скорость накопления энергии">⚡ <b id="energy">0</b></span>
+        <span class="spacer"></span>
+        <button class="pill" id="muteBtn" aria-pressed="false" title="Звук">🔊</button>
+      </div>
+
+      <div class="vn">
+        <div class="vn-box">
+          <div class="vn-name">
+            <b id="speaker">SELENA</b>
+            <span class="mood-tag" id="moodTag">нейтрально</span>
+            <span class="spacer"></span>
+            <span class="badge mock" id="brainBadge">mock-brain</span>
+          </div>
+          <div class="vn-text" id="text"></div>
+          <div class="choices" id="choices"></div>
+          <form class="sayform" id="sayForm" autocomplete="off">
+            <input id="sayInput" type="text" maxlength="90"
+                   placeholder="Скажи что-нибудь… «покажи туфли», «ты красивая», «как дела»">
+            <button class="btn primary" type="submit" aria-label="Отправить">→</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PANEL ============ -->
+  <aside class="panel">
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true"  data-pane="pane-hero">Героини</button>
+      <button class="tab" role="tab" aria-selected="false" data-pane="pane-shop">Гардероб</button>
+      <button class="tab" role="tab" aria-selected="false" data-pane="pane-tech">Стек</button>
+    </div>
+
+    <!-- HEROINES -->
+    <div class="pane" id="pane-hero">
+      <div class="hero-pick" id="heroPick">
+        <button data-hero="selena" aria-pressed="true">
+          <div class="thumb"><img src="__SELENA__" alt=""></div><span>Селена</span>
+        </button>
+        <button data-hero="mika" aria-pressed="false">
+          <div class="thumb"><img src="__MIKA__" alt=""></div><span>Мика</span>
+        </button>
+      </div>
+
+      <div class="card">
+        <h4>Привязанность</h4>
+        <div class="row"><span class="k">Уровень</span><span class="v" id="affLvl">0 / 6</span></div>
+        <div class="bar"><i id="affBar" style="width:0%"></i></div>
+        <div class="row"><span class="k">Доверие</span><span class="v" id="affVal">0</span></div>
+        <div class="row"><span class="k">Настроение</span><span class="v" id="moodVal">нейтрально</span></div>
+        <div class="row"><span class="k">Память о тебе</span><span class="v" id="memCt">0 фактов</span></div>
+      </div>
+
+      <div class="card">
+        <h4>Взаимодействие</h4>
+        <div class="grid2" style="margin-bottom:8px">
+          <button class="btn" data-act="compliment">Комплимент</button>
+          <button class="btn" data-act="gift">Подарить 🎁</button>
+          <button class="btn" data-act="tease">Подшутить</button>
+          <button class="btn" data-act="touch">Дотронуться</button>
+        </div>
+        <div class="tiny">Кликай прямо по героине — 8 зон с разными реакциями. Спам снижает настроение: у неё есть «терпение».</div>
+      </div>
+
+      <div class="card">
+        <h4>Живость (имитация)</h4>
+        <div class="row"><span class="k">Дыхание / покачивание</span><span class="v">CSS-риг</span></div>
+        <div class="row"><span class="k">Взгляд за курсором</span><span class="v" id="gazeState">off</span></div>
+        <div class="row"><span class="k">Реакция на тач</span><span class="v">jolt + SFX</span></div>
+        <div class="tiny" style="margin-top:8px">В проде этот слой заменяется на <b>Live2D moc3</b> (мигание, липсинк, физика волос) — см. вкладку «Стек».</div>
+      </div>
+
+      <div class="card">
+        <h4>Журнал</h4>
+        <div class="log" id="log"></div>
+      </div>
+    </div>
+
+    <!-- SHOP -->
+    <div class="pane" id="pane-shop" hidden>
+      <div class="card">
+        <h4>Гардероб <span class="badge" id="ownedBadge">0 / 6</span></h4>
+        <div class="grid2" id="shopGrid"></div>
+      </div>
+      <div class="card">
+        <h4>Экономика слайса</h4>
+        <div class="row"><span class="k">Монеты</span><span class="v" id="coins2">0</span></div>
+        <div class="row"><span class="k">Пассив за сессию</span><span class="v">+1 / 4 сек</span></div>
+        <div class="tiny">В реальной игре: скины = главный оффер после affinity-порога. Цена скина привязана к сцене, а не к статам — это правило жанра.</div>
+      </div>
+    </div>
+
+    <!-- TECH -->
+    <div class="pane" id="pane-tech" hidden>
+      <div class="card">
+        <h4>Что здесь по-настоящему</h4>
+        <div class="tiny">
+          Слайс демонстрирует <b>системный каркас</b>, а не финальный арт: риг-заглушка, мок-мозг вместо LLM,
+          процедурный звук. Всё остальное — реальный код, который переносится в прод без переписывания.
+        </div>
+      </div>
+      <div class="card">
+        <h4>Прод-стек (из досье)</h4>
+        <div class="tiny" style="line-height:1.9">
+          <b>Арт:</b> Anima Turbo v1.1 + LoRA персонажа + Ref-Adapter<br>
+          <b>Слои:</b> See-through → PSD<br>
+          <b>Риг:</b> image2live2d → .moc3 / .cmo3<br>
+          <b>Рантайм:</b> pixi.js v8 + <code>@jannchie/pixi-live2d-display</code><br>
+          <b>Голос:</b> IndexTTS-2.5 / GPT-SoVITS + липсинк по амплитуде<br>
+          <b>Мозг:</b> LLM + pgvector-память, персона графами<br>
+          <b>Хостинг:</b> Vercel (фронт) + fal.ai/Replicate (GPU-очередь)
+        </div>
+      </div>
+      <div class="card">
+        <h4>Ссылки</h4>
+        <div class="tiny" style="line-height:2">
+          <a href="https://github.com/jtydhr88/ComfyUI-See-through" target="_blank" rel="noopener">ComfyUI-See-through</a><br>
+          <a href="https://github.com/Jannchie/pixi-live2d-display" target="_blank" rel="noopener">pixi-live2d-display (PixиJS v8)</a><br>
+          <a href="https://github.com/Wenaka2004/comfyui-anima-ipadapter" target="_blank" rel="noopener">Anima IP-Adapter</a><br>
+          <a href="https://github.com/RVC-Boss/GPT-SoVITS" target="_blank" rel="noopener">GPT-SoVITS</a>
+        </div>
+        <div class="tiny" style="margin-top:10px">Полное досье — в файлах <code>docs/</code> рядом с этим файлом.</div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   VELVET CODE — vertical slice
+   Всё состояние в одном объекте: легко сериализуется в БД.
+   ============================================================ */
+const SPRITES = { selena: "__SELENA__", mika: "__MIKA__" };
+const ZOOM = { selena: {s:1.0, y:0}, mika: {s:1.03, y:0} }; // per-hero framing fix
+
+/* ---------- зоны тача (в % от бокса спрайта) ---------- */
+const ZONES = {
+  selena: [
+    {id:'hair',   label:'волосы', x:26, y:1,  w:48, h:9},
+    {id:'lips',   label:'губы',   x:36, y:9,  w:28, h:4},
+    {id:'neck',   label:'плечи',  x:28, y:14, w:44, h:8},
+    {id:'hand',   label:'рука',   x:50, y:24, w:16, h:8},
+    {id:'waist',  label:'талия',  x:32, y:30, w:36, h:12},
+    {id:'thigh',  label:'бедро',  x:37, y:46, w:26, h:14},
+    {id:'knee',   label:'колено', x:37, y:60, w:26, h:10},
+    {id:'feet',   label:'туфли',  x:33, y:88, w:34, h:12},
+  ],
+  mika: [
+    {id:'hair',   label:'волосы', x:24, y:1,  w:52, h:9},
+    {id:'lips',   label:'губы',   x:36, y:9,  w:28, h:4},
+    {id:'neck',   label:'плечи',  x:26, y:14, w:48, h:8},
+    {id:'hand',   label:'рука',   x:30, y:10, w:16, h:9},
+    {id:'waist',  label:'талия',  x:30, y:32, w:40, h:12},
+    {id:'thigh',  label:'бедро',  x:32, y:48, w:36, h:14},
+    {id:'knee',   label:'колено', x:34, y:62, w:32, h:10},
+    {id:'feet',   label:'туфли',  x:33, y:88, w:34, h:12},
+  ]
+};
+
+/* ---------- личности ---------- */
+const HEROINES = {
+  selena: {
+    name:'SELENA', full:'Селена Вейл',
+    role:'кибер-идол / ночная ведущая',
+    tint:'#ff6fa5', tint2:'#9b6cff',
+    moodLines:{
+      cold:['Не сегодня.','Ты мешаешь.','Сначала научись держать дистанцию, потом подходи.'],
+      neutral:['Хм… ладно, слушаю.','Ты забавный. Продолжай.','Я на сцене устаю от внимания. От тебя — пока нет.'],
+      warm:['О, это уже интересно.','Знаешь, с тобой не так скучно.','Ещё раз так посмотришь — и я решу, что ты правда мой.'],
+      hot:['Иди сюда.','Я весь день ждала именно этого взгляда.','Не заставляй меня краснеть на камеру, ладно?']
+    }
+  },
+  mika: {
+    name:'MIKA', full:'Мика Танэ',
+    role:'секретарь / твой личный менеджер',
+    tint:'#ffb36b', tint2:'#ff6fa5',
+    moodLines:{
+      cold:['Ой, дедлайн же.','Прости, я занята… почти.','Ты мешаешь работать. Мне. Тобой.'],
+      neutral:['Добрый день. Или уже вечер?','У тебя что-то срочное?.. Ну ладно, слушаю.','Я вообще-то всё ещё на работе.'],
+      warm:['Хм, ты не безнадёжен.','Мне нравится, когда ты так смотришь.','Ещё минуту — и я забуду про отчёты.'],
+      hot:['Только не в кабинете… ладно, в кабинете.','Я придумаю, как это оформить как «рабочую встречу».','Ты вообще знаешь, что со мной делаешь?']
+    }
+  }
+};
+
+/* ---------- реакции на зоны ---------- */
+const REACT = {
+  hair:  {cold:'Не трогай укладку.',        neutral:'Осторожнее с волосами…',        warm:'Нравится? Я старалась.',      hot:'Тише… мне щекотно.'},
+  lips:  {cold:'Даже не думай.',            neutral:'Это уже наглость.',             warm:'Ещё чуть ближе — и я не отвечаю за себя.', hot:'…ну наконец-то.'},
+  neck:  {cold:'Руки.',                     neutral:'Ты близко. Слишком?',           warm:'Шея — моё слабое место. Запомнил?',        hot:'Ммм… продолжай.'},
+  hand:  {cold:'Убери.',                    neutral:'Можно. Один раз.',              warm:'Держи крепче, не потеряюсь.',              hot:'Твоя рука. Моя. Всё, тема закрыта.'},
+  waist: {cold:'Границы, милый.',           neutral:'Смелый. Я запомню.',            warm:'Талия — да, а дальше по договорённости.',  hot:'Ну всё, ты попал.'},
+  thigh: {cold:'Это уже перебор.',          neutral:'М-м… а ты не стесняешься.',     warm:'Чулки сегодня новые, если что.',           hot:'Я же говорила: не смотри. Смотреть — можно.'},
+  knee:  {cold:'Не сейчас.',                neutral:'Опустись ниже — ой, то есть руки.', warm:'Щекотно же! Прекрати… или нет.',        hot:'Ещё раз так сделаешь — и я сяду тебе на колени.'},
+  feet:  {cold:'Смотри, но не трогай.',     neutral:'Заметил, да? Каблук 9 см.',     warm:'Туфли заказывала специально под это платье.', hot:'Хочешь — сама скажу, куда смотреть. Скажу.'}
+};
+
+/* ---------- мок-мозг: ключевые интенты ---------- */
+const INTENTS = [
+  {k:['привет','здравств','хай','ку'],        tag:'greet'},
+  {k:['как дела','как ты','настроен'],       tag:'howareyou'},
+  {k:['красив','прекрасн','очароват'],       tag:'beautiful'},
+  {k:['ног','бедр','колен'],                 tag:'legs'},
+  {k:['туфл','каблук','ступн','обувь'],      tag:'feet'},
+  {k:['чулк','колготк','бель'],              tag:'hosiery'},
+  {k:['платье','наряд','одежд','скин'],       tag:'outfit'},
+  {k:['работ','сцен','концерт','офис'],       tag:'work'},
+  {k:['люблю','нравишься'],                  tag:'love'},
+  {k:['подар','дарю'],                       tag:'gift'},
+  {k:['пока','до встречи'],                  tag:'bye'}
+];
+
+const REPLIES = {
+  selena:{
+    greet:{cold:'Ты снова здесь. Ну привет.',neutral:'Привет. Я как раз думала о тебе. Не льсти себе — «думала» это много.',warm:'Привет. Специально пришла раньше, чтобы ты не ждал.',hot:'Привет… Я скучала. Признавать это — унизительно и приятно.'},
+    howareyou:{cold:'Устала. От вопросов в том числе.',neutral:'Нормально. Голос берегу, сегодня живой эфир.',warm:'Лучше, чем вчера. Ты — причина процентов на тридцать.',hot:'Сейчас — идеально, и это целиком твоя заслуга.'},
+    beautiful:{cold:'Дежурный комплимент. Отвергнут.',neutral:'Спасибо. Ты не первый, но сказал нормально.',warm:'Ммм. Повтори ещё раз, я не расслышала.',hot:'Говори так каждый день, и я стану совсем ручной.'},
+    legs:{cold:'Держи глаза при себе.',neutral:'Я знала, что ты заметишь. Все замечают.',warm:'Платье с разрезом — это честнее, чем без него, согласись.',hot:'Смотреть не запрещено. Комментировать — по прейскуранту.'},
+    feet:{cold:'Смотри, но не трогай.',neutral:'Девять сантиметров. Держу баланс лучше многих.',warm:'Ты первый, кто спросил про обувь, а не про размер груди. Плюс тебе.',hot:'Хочешь знать, что я снимаю первым? Подсказка: не серьги.'},
+    hosiery:{cold:'Слишком личное.',neutral:'Плотность 40. Практично и, как видишь, не практично.',warm:'Ты очень внимательный. Это почти пугает.',hot:'Не смотри так — они всё равно порвутся не от взгляда.'},
+    outfit:{cold:'Не обсуждаю гардероб с незнакомцами.',neutral:'Сценический образ. Всё продумано до шва.',warm:'Есть ещё три версии этого платья. Две — только для тебя.',hot:'Открою гардероб, если пообещаешь держать себя в руках. Хотя бы минуту.'},
+    work:{cold:'Не начинай про работу.',neutral:'Запись, репетиция, снова запись. И так по кругу.',warm:'Хочешь прийти на репетицию? Официально — нельзя. Неофициально — ты уже почти приглашён.',hot:'Я думала о тебе посреди второй песни. Пришлось начинать заново.'},
+    love:{cold:'Не смеши.',neutral:'Любовь — громкое слово. Начни с симпатии.',warm:'Я тоже. Но я не скажу это вслух, я просто надену то платье.',hot:'Люблю. Всё, я это сказала, теперь ты обязан остаться.'},
+    gift:{cold:'Взятка принята. Условно.',neutral:'О. Ты умеешь удивлять.',warm:'Мне нравится. Правда. Не смотри так, что мне приятно.',hot:'Ты знаешь, чего я хочу. Это опасно и восхитительно.'},
+    bye:{cold:'Уходишь? Наконец-то.',neutral:'Иди. Но вернись.',warm:'Возвращайся быстрее, ладно?',hot:'Останься. Ладно, иди. Но напиши.'},
+    fallback:{cold:'Ммм. Что-то невнятное.',neutral:'Не уверена, что поняла, но звучало мило.',warm:'Говори ещё, мне нравится твой голос.',hot:'Я слушаю тебя и не слышу ни слова, знаешь?'}
+  },
+  mika:{
+    greet:{cold:'Ох. Здравствуйте.',neutral:'Привет. У меня через двадцать минут совещание, так что быстро.',warm:'Привет! Я оставила окно в календаре. Для тебя.',hot:'Наконец-то. Я уже начала придумывать причины тебя вызвать.'},
+    howareyou:{cold:'Занята. Очень.',neutral:'Как обычно — отчёты, кофе, ты.',warm:'Устала, но в хорошем смысле. И ты улучшил статистику.',hot:'Напряжённо. В самом интересном смысле.'},
+    beautiful:{cold:'Да, я знаю. Дальше?',neutral:'Формально — спасибо. Неформально — продолжайте.',warm:'Ой… Обычно так не говорят подчинённые.',hot:'Ещё раз, и я выйду из роли профессионала.'},
+    legs:{cold:'Устав компании запрещает развивать тему.',neutral:'Юбка по регламенту. Каблук — по настроению.',warm:'Сорок децибел этого комплимента я уже записала в личное дело.',hot:'В личное. В очень личное.'},
+    feet:{cold:'Ступайте работать.',neutral:'Каблуки — мой единственный протест против дресс-кода.',warm:'Восемь часов на них. Кто-то же должен их оценить.',hot:'Намекаете, что мне их снять?.. Я подумаю. Не сейчас. Может, сейчас.'},
+    hosiery:{cold:'Не по протоколу.',neutral:'Колготки — часть корпоративного образа.',warm:'Сегодня, между прочим, без стрелки. Старалась.',hot:'Скажу прямо: сравнивать плотность с моим настроением — бесполезно.'},
+    outfit:{cold:'Дресс-код.',neutral:'Простая блузка и юбка. Всё.',warm:'У меня есть версия с приоткрытым воротом. Не для офиса.',hot:'В пятницу сокращённый день. Формально.'},
+    work:{cold:'Я занята.',neutral:'Пятнадцать задач, дедлайн вчера. Как всегда.',warm:'Знаешь, у тебя сегодня единственный слот без претензий.',hot:'Отменила два совещания. Ради тебя. Это, между прочим, серьёзно.'},
+    love:{cold:'Это уже вне рабочей этики.',neutral:'Сильное заявление. Принято к рассмотрению.',warm:'Я… гм. Не сейчас. Сейчас у меня краснеют уши.',hot:'Взаимно. И если ты снова спросишь — тоже взаимно.'},
+    gift:{cold:'Формально это конфликт интересов.',neutral:'Ой. Спасибо… правда.',warm:'Ты серьёзно? Я поставлю это на стол. На видное место.',hot:'Иди сюда, я не могу это больше молча терпеть.'},
+    bye:{cold:'Всего доброго.',neutral:'Закрываю смену. Возвращайтесь.',warm:'Хорошего вечера. И напиши.',hot:'Не уходи… Я думала, что не удержу тебя. Я попробую.'},
+    fallback:{cold:'Простите, я не уловила мысль.',neutral:'Запишу это в протокол.',warm:'Ты говоришь, а я всё равно думаю о своём. Продолжай.',hot:'Мне сложно формулировать, когда ты рядом.'}
+  }
+};
+
+/* ---------- скины ---------- */
+const SKINS = {
+  selena:[
+    {id:'sc_base',   n:'Ночной эфир',      d:'базовый',    p:0,   emoji:'🎤'},
+    {id:'sc_lace',   n:'Кружево',          d:'+15% искры', p:600, emoji:'🖤'},
+    {id:'sc_office', n:'Служебный вход',   d:'+15% тишины',p:900, emoji:'📋'},
+  ],
+  mika:[
+    {id:'mk_base',   n:'Дресс-код',        d:'базовый',    p:0,   emoji:'💼'},
+    {id:'mk_silk',   n:'Шёлк',             d:'+15% доверия',p:700, emoji:'🎀'},
+    {id:'mk_late',   n:'Поздняя смена',    d:'+15% близости',p:1000,emoji:'🌙'},
+  ]
+};
+
+/* ============================================================ */
+const $ = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
+
+const S = {
+  hero:'selena',
+  aff:{selena:6, mika:2},
+  coins:320,
+  energy:40,
+  mute:false,
+  owned:['sc_base','mk_base'],
+  skins:{selena:'sc_base', mika:'mk_base'},
+  mem:{selena:[], mika:[]},
+  patience:{selena:5, mika:5},
+  lastTap:0,
+  tapTimes:[],
+  gaze:false,
+  log:[]
+};
+
+const MOODS = ['cold','neutral','warm','hot'];
+const MOOD_RU = {cold:'холодно', neutral:'нейтрально', warm:'тепло', hot:'раскалена'};
+const moodOf = h => {
+  const a = S.aff[h];
+  if (a >= 85) return 'hot';
+  if (a >= 50) return 'warm';
+  if (a >= 20) return 'neutral';
+  return 'cold';
+};
+const affLvl = h => Math.min(6, Math.floor(S.aff[h] / 16.7)); // 0..6
+
+/* ---------- звук: процедурный, без файлов ---------- */
+let AC = null;
+function ctx(){
+  if (!AC) { const C = window.AudioContext || window.webkitAudioContext; if (C) AC = new C(); }
+  return AC;
+}
+function sfx(kind){
+  if (S.mute) return;
+  const ac = ctx(); if (!ac) return;
+  if (ac.state === 'suspended') ac.resume();
+  const t = ac.currentTime;
+  const o = ac.createOscillator(), g = ac.createGain();
+  o.connect(g); g.connect(ac.destination);
+  const cfg = {
+    tap:   {f:900, f2:420, type:'triangle', v:.05, d:.09},
+    happy: {f:660, f2:1180,type:'sine',     v:.05, d:.16},
+    no:    {f:220, f2:140, type:'sawtooth', v:.035,d:.14},
+    coin:  {f:1320,f2:1760,type:'square',   v:.03, d:.10},
+  }[kind] || {f:600,f2:600,type:'sine',v:.04,d:.08};
+  o.type = cfg.type;
+  o.frequency.setValueAtTime(cfg.f, t);
+  o.frequency.exponentialRampToValueAtTime(cfg.f2, t + cfg.d);
+  g.gain.setValueAtTime(0, t);
+  g.gain.linearRampToValueAtTime(cfg.v, t + .012);
+  g.gain.exponentialRampToValueAtTime(.0001, t + cfg.d);
+  o.start(t); o.stop(t + cfg.d + .02);
+}
+
+/* ---------- индикация ---------- */
+let toastT;
+function toast(msg){
+  const el = $('#toast'); el.textContent = msg; el.classList.add('show');
+  clearTimeout(toastT); toastT = setTimeout(()=>el.classList.remove('show'), 2100);
+}
+let typeT;
+function say(who, text, opts={}){
+  const t = $('#text'); t.textContent = ''; clearInterval(typeT);
+  const chars = [...text]; let i = 0;
+  const speed = opts.instant ? 0 : 14;
+  if (opts.instant){ t.textContent = text; }
+  else {
+    typeT = setInterval(()=>{
+      t.textContent = chars.slice(0, ++i).join('');
+      if (i >= chars.length) clearInterval(typeT);
+    }, speed);
+  }
+  $('#speaker').textContent = who;
+  const m = moodOf(S.hero);
+  $('#moodTag').textContent = MOOD_RU[m];
+  $('#moodTag').style.color = ({cold:'#8fb6ff',neutral:'#b9a9c8',warm:'#ffcf6b',hot:'#ff6fa5'})[m];
+}
+
+function logLine(msg){
+  const d = new Date();
+  const ts = `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+  S.log.unshift(`<div><span class="t">${ts}</span>${msg}</div>`);
+  S.log = S.log.slice(0, 40);
+  $('#log').innerHTML = S.log.join('');
+}
+
+/* ---------- сцена ---------- */
+function paint(){
+  const h = S.hero, H = HEROINES[h];
+  const m = moodOf(h);
+
+  // фоновое настроение
+  const heat = {cold:.06, neutral:.14, warm:.26, hot:.42}[m];
+  const glow = $('#glow');
+  glow.style.background = `radial-gradient(circle, ${H.tint} 0%, transparent 62%)`;
+  glow.style.opacity = heat;
+
+  const filt = {
+    cold:   'saturate(.82) brightness(.92) hue-rotate(-6deg)',
+    neutral:'saturate(1) brightness(1)',
+    warm:   'saturate(1.08) brightness(1.04) hue-rotate(4deg)',
+    hot:    'saturate(1.16) brightness(1.07) hue-rotate(8deg)'
+  }[m];
+  $('#heroine').style.filter = `drop-shadow(0 30px 44px rgba(0,0,0,.72)) drop-shadow(0 0 26px ${H.tint}44) ${filt}`;
+
+  // полоски HUD
+  const a = S.aff[h];
+  $('#affVal').textContent = Math.round(a);
+  $('#affLvl').textContent = `${affLvl(h)} / 6`;
+  $('#affBar').style.width = `${Math.min(100, a)}%`;
+  $('#moodVal').textContent = MOOD_RU[m];
+  $('#memCt').textContent = `${S.mem[h].length} ${plural(S.mem[h].length,['факт','факта','фактов'])}`;
+  $('#coins').textContent = S.coins;
+  $('#coins2').textContent = S.coins;
+  $('#energy').textContent = Math.round(S.energy);
+  $('#ownedBadge').textContent = `${S.owned.length} / 6`;
+
+  // скины — перестраиваем только при реальном изменении (иначе hover/клик рвётся)
+  const sig = h + '|' + S.owned.join(',') + '|' + S.skins[h];
+  if ($('#shopGrid')._sig === sig) return;
+  $('#shopGrid')._sig = sig;
+  $('#shopGrid').innerHTML = SKINS[h].map(s=>{
+    const owned = S.owned.includes(s.id);
+    const active = S.skins[h] === s.id;
+    return `<button class="skin ${owned?'owned':'locked'} ${active?'active':''}" data-skin="${s.id}">
+      ${owned?'':`<span class="price">${s.p}🪙</span>`}
+      <div class="cap">${owned?s.emoji:'🔒'}</div>
+      <b>${s.n}</b><small>${owned? (active?'надето':'куплено') : s.d}</small>
+    </button>`;
+  }).join('');
+}
+const plural=(n,f)=>f[(n%100>4&&n%100<20)?2:[0,1,2][Math.min(n%10,2)===1?0:(n%10>=2&&n%10<=4?1:2)]] || f[0];
+
+function buildZones(){
+  const host = $('#zones');
+  host.innerHTML = '';
+  ZONES[S.hero].forEach(z=>{
+    const b = document.createElement('button');
+    b.className = 'zone'; b.type = 'button';
+    b.dataset.zone = z.id;
+    b.setAttribute('aria-label', z.label);
+    b.style.left = z.x+'%'; b.style.top = z.y+'%';
+    b.style.width = z.w+'%'; b.style.height = z.h+'%';
+    b.addEventListener('pointerdown', ev=>{
+      ev.preventDefault();
+      touch(z, ev.clientX, ev.clientY);
+    });
+    host.appendChild(b);
+  });
+}
+
+/* ---------- тач ---------- */
+function touch(z, cx, cy){
+  const h = S.hero, m = moodOf(h);
+  const now = performance.now();
+  S.tapTimes = S.tapTimes.filter(t=>now - t < 4000);
+  S.tapTimes.push(now);
+  const spam = S.tapTimes.length > 6;
+
+  const hero = $('#heroine');
+  hero.classList.remove('jolt'); void hero.offsetWidth; hero.classList.add('jolt');
+  // jolt перекрывает breathe через animation → снимаем класс, иначе дыхание умирает
+  clearTimeout(hero._joltT);
+  hero._joltT = setTimeout(()=>hero.classList.remove('jolt'), 440);
+
+  const stage = $('#stage').getBoundingClientRect();
+  const px = cx - stage.left, py = cy - stage.top;
+
+  if (spam){
+    S.patience[h] = Math.max(0, S.patience[h] - 1);
+    S.aff[h] = Math.max(0, S.aff[h] - 2);
+    floatText(px, py, '−2', '#8fb6ff');
+    sfx('no');
+    if (S.patience[h] <= 0){
+      S.patience[h] = 5;
+      say(HEROINES[h].name, HEROINES[h].moodLines.cold[0] + ' Убери руки, я сказала.');
+      logLine(`<b>${HEROINES[h].name}</b>: терпение кончилось → холод`);
+    } else {
+      say(HEROINES[h].name, m==='hot' ? 'Тише… не всё сразу.' : 'Полегче. Я не тренажёр.');
+    }
+  } else {
+    const gain = {cold:1, neutral:2, warm:3, hot:4}[m];
+    S.aff[h] = Math.min(100, S.aff[h] + gain);
+    const line = REACT[z.id]?.[m] || '…';
+    say(HEROINES[h].name, line);
+    floatText(px, py, '+'+gain, '#ff9ec4');
+    sfx('tap');
+    if (m === 'hot' || z.id === 'feet' || z.id === 'thigh') hearts(px, py, m==='hot'?6:3);
+    if (S.aff[h] > 0 && Math.round(S.aff[h]) % 25 < 4) toast(`${HEROINES[h].full}: новая грань отношений`);
+    logLine(`тач · <b>${z.label}</b> → +${gain} привязанности`);
+  }
+  S.mem[h] = addFact(S.mem[h], `трогает ${z.label}`);
+  paint();
+}
+
+function addFact(list, f){
+  if (!list.includes(f)) list.push(f);
+  return list.slice(-12);
+}
+
+function floatText(x, y, txt, color){
+  const el = document.createElement('div');
+  el.className = 'float'; el.textContent = txt;
+  el.style.left = x+'px'; el.style.top = y+'px'; el.style.color = color;
+  $('#fx').appendChild(el);
+  setTimeout(()=>el.remove(), 1200);
+}
+function hearts(x, y, n){
+  for (let i=0;i<n;i++){
+    const el = document.createElement('div');
+    el.className = 'heart'; el.textContent = ['♥','♡','❤'][i%3];
+    el.style.left = (x + (Math.random()*60-30))+'px';
+    el.style.top  = (y + (Math.random()*24-12))+'px';
+    el.style.setProperty('--dx', (Math.random()*90-45)+'px');
+    el.style.setProperty('--dr', (Math.random()*60-30)+'deg');
+    el.style.animationDelay = (i*70)+'ms';
+    $('#fx').appendChild(el);
+    setTimeout(()=>el.remove(), 3000);
+  }
+}
+
+/* ---------- мозг ---------- */
+function detect(text){
+  const t = text.toLowerCase();
+  for (const it of INTENTS) if (it.k.some(k=>t.includes(k))) return it.tag;
+  return null;
+}
+
+function respond(tag, raw){
+  const h = S.hero, m = moodOf(h), H = HEROINES[h];
+  if (!tag){
+    // память: если уже спрашивал то же самое
+    const key = raw.trim().slice(0,24).toLowerCase();
+    if (key && S.mem[h].includes('q:'+key)){
+      say(H.name, m==='cold' ? 'Ты это уже спрашивал.' : 'Ты повторяешься. Мне это, представь, нравится.');
+      return;
+    }
+    if (key) S.mem[h] = addFact(S.mem[h], 'q:'+key);
+    say(H.name, REPLIES[h].fallback[m]);
+    S.aff[h] = Math.min(100, S.aff[h] + 1);
+    logLine(`реплика без интента → fallback (${m})`);
+    paint();
+    return;
+  }
+  const pack = REPLIES[h][tag];
+  const line = pack ? pack[m] : REPLIES[h].fallback[m];
+  const bump = {greet:1, howareyou:1, beautiful:4, legs:3, feet:4, hosiery:3, outfit:2, work:2, love:6, gift:5, bye:0}[tag] ?? 1;
+  S.aff[h] = Math.min(100, S.aff[h] + bump);
+  say(H.name, line);
+  if (bump >= 4) { sfx('happy'); hearts(stageCenter().x, stageCenter().y, 5); }
+  S.mem[h] = addFact(S.mem[h], 'intent:'+tag);
+  logLine(`интент <b>${tag}</b> → +${bump} (${m})`);
+  paint();
+}
+function stageCenter(){
+  const r = $('#stage').getBoundingClientRect();
+  return {x:r.width/2, y:r.height*0.36};
+}
+
+/* ---------- быстрые действия ---------- */
+function action(act){
+  const h = S.hero, m = moodOf(h), H = HEROINES[h];
+  const c = stageCenter();
+  if (act === 'compliment'){ respond('beautiful',''); }
+  if (act === 'tease'){
+    const ok = m === 'warm' || m === 'hot';
+    S.aff[h] = Math.max(0, Math.min(100, S.aff[h] + (ok?2:-3)));
+    say(H.name, ok ? 'О. Ты умеешь быть дерзким. Продолжай, пока я не передумала.' : 'Шутишь? Сначала заслужи.');
+    sfx(ok?'happy':'no'); paint(); logLine(`подшутил → ${ok?'+2':'-3'}`);
+  }
+  if (act === 'gift'){
+    if (S.coins < 120){ toast('Не хватает монет (120)'); sfx('no'); return; }
+    S.coins -= 120;
+    S.aff[h] = Math.min(100, S.aff[h] + 7);
+    S.mem[h] = addFact(S.mem[h], 'подарок');
+    say(H.name, REPLIES[h].gift[m]); sfx('coin'); hearts(c.x, c.y, 7);
+    paint(); logLine('подарок → −120🪙, +7');
+  }
+  if (act === 'touch'){
+    const z = ZONES[h][Math.floor(Math.random()*ZONES[h].length)];
+    const r = $('#stage').getBoundingClientRect();
+    touch(z, r.left + r.width/2, r.top + r.height*0.5);
+  }
+}
+
+/* ---------- экипировка скина ---------- */
+function pickSkin(id){
+  const h = S.hero;
+  const sk = SKINS[h].find(s=>s.id===id);
+  if (!sk) return;
+  if (S.owned.includes(id)){
+    S.skins[h] = id;
+    $('#sprite').style.filter = id.includes('lace') ? 'saturate(.7) brightness(.9) contrast(1.05)' : '';
+    toast(`Надето: ${sk.n}`); sfx('tap'); paint(); return;
+  }
+  if (S.coins < sk.p){ toast(`Нужно ${sk.p}🪙`); sfx('no'); return; }
+  S.coins -= sk.p; S.owned.push(id); S.skins[h] = id; S.aff[h] = Math.min(100, S.aff[h]+4);
+  sfx('coin'); hearts(stageCenter().x, stageCenter().y, 8);
+  toast(`Куплено: ${sk.n}`); logLine(`скин <b>${sk.n}</b> → −${sk.p}🪙`);
+  paint();
+}
+
+/* ---------- смена героини ---------- */
+function switchHero(h){
+  if (h === S.hero) return;
+  S.hero = h;
+  const img = $('#sprite');
+  const rigEl = $('#heroine');
+  rigEl.classList.add('swap');
+  setTimeout(()=>{
+    img.src = SPRITES[h];
+    rigEl.classList.remove('swap');
+    $('#sprite').style.filter = '';
+    buildZones(); paint();
+    const m = moodOf(h);
+    say(HEROINES[h].name, HEROINES[h].moodLines[m][Math.floor(Math.random()*3)], {instant:false});
+    // любимый выбор: приветствие по времени
+    logLine(`переключение → ${HEROINES[h].full}`);
+  }, 220);
+  $$('#heroPick button').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.hero===h)));
+}
+
+/* ---------- взгляд за курсором ---------- */
+function initGaze(){
+  const stage = $('#stage');
+  let raf = null, tx = 50, ty = 22;
+  stage.addEventListener('pointermove', e=>{
+    const r = stage.getBoundingClientRect();
+    tx = ((e.clientX - r.left) / r.width) * 100;
+    ty = ((e.clientY - r.top) / r.height) * 100;
+    if (!S.gaze){ S.gaze = true; $('#gazeState').textContent = 'on'; }
+    if (raf) return;
+    raf = requestAnimationFrame(()=>{
+      raf = null;
+      const dx = (tx - 50) / 50, dy = (ty - 50) / 50;
+      $('#rig').style.transform = `translateX(calc(-50% + ${dx*10}px)) translateY(${dy*4}px) rotate(${dx*0.55}deg)`;
+      const rim = $('#rim');
+      rim.style.setProperty('--gx', (50 + dx*16)+'%');
+      rim.style.setProperty('--gy', (22 + dy*12)+'%');
+    });
+  });
+  stage.addEventListener('pointerleave', ()=>{
+    $('#rig').style.transform = 'translateX(-50%)';
+  });
+}
+
+/* ---------- время / «жизнь» ---------- */
+function tickClock(){
+  const d = new Date();
+  const hh = d.getHours();
+  const part = hh<5?'ночь':hh<11?'утро':hh<17?'день':hh<23?'вечер':'ночь';
+  $('#clock').textContent = `${String(hh).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')} · ${part}`;
+}
+function greeting(){
+  const h = new Date().getHours();
+  const hh = S.hero, m = moodOf(hh), H = HEROINES[hh];
+  const part = h<5?'ночь':h<11?'утро':h<17?'день':h<23?'вечер':'ночь';
+  const byPart = {
+    'ночь':  {selena:'Ночной эфир закончился. А ты всё ещё здесь.', mika:'Рабочий день давно кончился, а мы всё ещё в офисе.'},
+    'утро':  {selena:'Утро. Я не в ресурсе, но рада тебя видеть.', mika:'Доброе утро. Кофе на столе, отчёты — потом.'},
+    'день':  {selena:'День. Репетиция через час, так что у тебя есть час.', mika:'Добрый день. У меня окно на пятнадцать минут. Начинай.'},
+    'вечер': {selena:'Вечер. Самое честное время суток, согласись.', mika:'Вечер. Формально я уже не на работе.'}
+  }[part][hh];
+  say(H.name, byPart + ' ' + H.moodLines[m][0]);
+  logLine(`приветствие по времени суток (${part})`);
+}
+
+/* ---------- инициализация ---------- */
+function init(){
+  buildZones(); paint(); tickClock(); greeting(); initGaze();
+
+  // табы
+  $$('.tab').forEach(t=>t.addEventListener('click', ()=>{
+    $$('.tab').forEach(x=>x.setAttribute('aria-selected','false'));
+    t.setAttribute('aria-selected','true');
+    $$('.pane').forEach(p=>p.hidden = true);
+    $('#'+t.dataset.pane).hidden = false;
+  }));
+
+  // героини
+  $$('#heroPick button').forEach(b=>b.addEventListener('click', ()=>switchHero(b.dataset.hero)));
+
+  // действия
+  $$('[data-act]').forEach(b=>b.addEventListener('click', ()=>action(b.dataset.act)));
+
+  // скины (делегирование)
+  $('#shopGrid').addEventListener('click', e=>{
+    const b = e.target.closest('[data-skin]'); if (!b) return;
+    pickSkin(b.dataset.skin);
+  });
+
+  // свободный ввод → интент-мозг (в проде здесь вызов LLM, см. docs/04)
+  $('#sayForm').addEventListener('submit', e=>{
+    e.preventDefault();
+    const inp = $('#sayInput');
+    const v = inp.value.trim();
+    if (!v) return;
+    respond(detect(v), v);
+    inp.value = '';
+  });
+
+  // звук
+  $('#muteBtn').addEventListener('click', ()=>{
+    S.mute = !S.mute;
+    $('#muteBtn').textContent = S.mute ? '🔇' : '🔊';
+    $('#muteBtn').setAttribute('aria-pressed', String(S.mute));
+  });
+
+  // экономика + регенерация настроения
+  setInterval(()=>{
+    S.coins += 1;
+    S.energy = Math.min(100, S.energy + 0.6);
+    paint();
+  }, 4000);
+  setInterval(()=>{
+    // «живая» героиня сама инициирует реплику
+    if (Math.random() < 0.22){
+      const h = S.hero, m = moodOf(h);
+      const pool = HEROINES[h].moodLines[m];
+      const idle = ['Я здесь. Если что.', 'Тишина. Мне она нравится больше, чем я думала.', 'Не уходи надолго.'];
+      say(HEROINES[h].name, Math.random()<0.45 ? pool[Math.floor(Math.random()*pool.length)] : idle[Math.floor(Math.random()*idle.length)]);
+      logLine('инициатива героини (ambient)');
+    }
+  }, 22000);
+  setInterval(tickClock, 10000);
+
+  // подсказка зон
+  setTimeout(()=>$$('.zone').forEach(z=>{
+    z.classList.add('hint'); setTimeout(()=>z.classList.remove('hint'), 1600);
+  }), 2600);
+
+  // первая фраза
+  setTimeout(()=>logLine('сессия начата'), 300);
+}
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

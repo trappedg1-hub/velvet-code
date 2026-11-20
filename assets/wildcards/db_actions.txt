@@ -1,0 +1,22 @@
+sitting
+standing
+leaning forward
+leaning back
+on side
+on stomach
+crossed legs
+legs together
+legs apart
+kneeling
+squatting
+walking
+running
+jumping
+arched back
+head tilt
+arms behind back
+stretching
+bent over
+feet up
+presenting foot
+spread legs
