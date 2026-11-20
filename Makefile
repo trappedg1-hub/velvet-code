@@ -157,5 +157,11 @@ anchors:
 slice:
 	python3 tools/rig_anchors.py --all && python3 tools/build_slice.py
 
+push:
+	@echo "нужен адрес репозитория: git remote add origin https://github.com/<USER>/<REPO>.git && git push -u origin main"
+
+bundle:
+	git bundle create velvet-code.bundle --all && git bundle verify velvet-code.bundle | tail -2
+
 clean:
 	rm -rf .pytest_cache __pycache__ automation/__pycache__ tests/__pycache__

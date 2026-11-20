@@ -213,22 +213,46 @@ watermark, NSFW-узлы, пост-цензуру). `--recipe` — где что
 
 ## 12. Как это сохранить на GitHub
 
-Репозиторий в этой папке уже инициализирован, коммиты сделаны. Нужен только адрес:
+Репозиторий инициализирован здесь же, история уже есть:
+
+```
+8cf0ab1 ci и правила: реальные гейты вместо заглушек
+5d8161c доки и передача: 18 документов + HANDOFF для другого агента
+e30a9a5 ассеты: утверждённый каст v11 и вертикальный срез
+0993005 инструменты: форж промптов, ткань, стопа, смелость, негатив, артефакты, арена
+8b8e048 база: карточки героинь, канон v12 (46 элементов), правила, очередь
+```
+
+Ветка `main`, рабочее дерево чистое, `.git` весит 12 МБ. Нужен только адрес:
 
 ```bash
-# 1. создать пустой репозиторий на GitHub (без README), затем:
 git remote add origin https://github.com/<USER>/<REPO>.git
-git branch -M main
 git push -u origin main
 ```
 
-Если GitHub просит пароль — нужен **personal access token** (Settings → Developer settings →
-Tokens, права `repo`), в качестве пароля вставляется токен.
+Пароль — **personal access token** (Settings → Developer settings → Personal access tokens,
+права `repo`), не пароль от аккаунта.
 
-**Что в git не попадает** (см. `.gitignore`): промежуточные рендеры `assets/raw/`, отчёты
-`review/*.html` (пересобираются одной командой), кэши и `.arena/`. Всё восстанавливается:
+**Если пушить нечем прямо сейчас** — рядом лежит `velvet-code.bundle` (полная история одним
+файлом, 11 МБ). Другой агент/машина поднимает проект так:
 
 ```bash
-python3 automation/review.py          # отчёт
-python3 tools/pipeline_sprites.py --name m_selena   # спрайт из сырого кадра
+git clone velvet-code.bundle velvet-code && cd velvet-code
 ```
+
+Обновить бандл после новых коммитов: `make bundle`.
+
+**Что в git не попадает** (`.gitignore`) и как восстанавливается:
+
+| не в git | почему | восстановить |
+|---|---|---|
+| `assets/raw/` (43 МБ) | промежуточные кадры на хромакее | `assets/prompts/renders_v11.jsonl` → рендер → `make repair` |
+| `review/*.html` | отчёты на утверждение, 2–3 МБ | `python3 automation/review.py` |
+| `.arena/`, кэши | рантайм турниров и Python | `python3 -m automation.arena_loop init` |
+
+CI (`.github/workflows/ci.yml`) на каждый push: pytest → qa_sprites → qa_render →
+neg_audit → filter_audit → `canon check` → сборка отчёта → схема карточек (возраст ≥ 18,
+≥ 6 зон) → `node --check` по JS прототипа.
+
+**Без закрытых ключей и токенов.** `.env.example` — только имена переменных; реальный `.env`
+в git не кладём никогда.
