@@ -243,6 +243,11 @@ def main() -> None:
         blocking = [p for p in probs if not p.startswith(("ml:", "gaps:", "info:"))]
         hard += bool(blocking)
         rows.append((f.stem.removesuffix("_raw"), probs))
+    if not rows:
+        # кадры на хромакее в git не лежат (assets/raw в .gitignore) — это не ошибка
+        print("нет сырых кадров в assets/raw — проверка рендеров пропущена")
+        print("как восстановить: assets/prompts/renders_v11.jsonl → рендер → make repair")
+        sys.exit(0)
     width = max(len(n) for n, _ in rows)
     for name, probs in rows:
         mark = ("OK  " if not any(not p.startswith(("ml:", "gaps:", "info:")) for p in probs)
