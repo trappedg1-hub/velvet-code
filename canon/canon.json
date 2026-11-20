@@ -1,6 +1,6 @@
 {
   "schema": 2,
-  "updated": "2026-11-20T10:34:06Z",
+  "updated": "2026-11-20T12:13:46Z",
   "items": [
     {
       "id": "decisions-2026-11-20",
@@ -2204,6 +2204,91 @@
       },
       "note": "",
       "updated": "2026-11-20T10:34:06Z"
+    },
+    {
+      "id": "pose-study-selena-v1",
+      "kind": "pose-study",
+      "title": "Селена — жест у оправы",
+      "status": "draft",
+      "hash": "sha256:d7f54c4d1c0a79a67719566dcf5dd4fa",
+      "approved_hash": null,
+      "data": {
+        "heroine": "selena",
+        "reference": "assets/sprite/m_selena.webp",
+        "image": "assets/concept/pose-studies/selena.webp",
+        "pose": "Опора на одну ногу, вторая согнута и перекрещена. Одна рука у оправы, другая на бедре; взгляд прямо на зрителя.",
+        "review_note": "Сверить баланс на опорной ноге и читаемость ремешков на поднятой туфле."
+      },
+      "note": "",
+      "updated": "2026-11-20T12:10:10Z"
+    },
+    {
+      "id": "pose-study-nova-v1",
+      "kind": "pose-study",
+      "title": "Нова — разворот с прядью",
+      "status": "draft",
+      "hash": "sha256:d975018ded525d359423767e50a11c04",
+      "approved_hash": null,
+      "data": {
+        "heroine": "nova",
+        "reference": "assets/sprite/m_nova.webp",
+        "image": "assets/concept/pose-studies/nova.webp",
+        "pose": "Плечи и бёдра развёрнуты в разные стороны. Поднятая рука держит прядь; улыбка через плечо.",
+        "review_note": "Проверить кисть у пояса и сохранить тёплый загар при следующем рендере."
+      },
+      "note": "",
+      "updated": "2026-11-20T12:10:10Z"
+    },
+    {
+      "id": "pose-study-reika-v1",
+      "kind": "pose-study",
+      "title": "Рэйка — взгляд через плечо",
+      "status": "draft",
+      "hash": "sha256:5ab499199edfddbf0523b436265f409f",
+      "approved_hash": null,
+      "data": {
+        "heroine": "reika",
+        "reference": "assets/sprite/m_reika.webp",
+        "image": "assets/concept/pose-studies/reika.webp",
+        "pose": "Боковой шаг, рука у лица, другая на талии. Голова повёрнута к зрителю.",
+        "review_note": "В черновике жест ближе к подбородку, чем к серьге, а ботильоны без ремешка. Перед игровым рендером сверить с референсом."
+      },
+      "note": "",
+      "updated": "2026-11-20T12:10:10Z"
+    },
+    {
+      "id": "pose-study-selena-mature-v1",
+      "kind": "pose-study",
+      "title": "Селена — широкая стойка в белье",
+      "status": "draft",
+      "hash": "sha256:c1dffe0314c22fe9b05718d9286c3c25",
+      "approved_hash": null,
+      "data": {
+        "heroine": "selena",
+        "reference": "assets/sprite/m_selena.webp",
+        "image": "assets/concept/pose-studies/selena_mature.webp",
+        "pose": "Mature-этюд: широкая стойка с разведенными ногами, одна рука у оправы, другая на бедре. Чёрный комплект белья, чулки и туфли полностью видны.",
+        "review_note": "Проверить, что комплект читается как белье, а не как костюм; сверить очки и прическу с каноном v11."
+      },
+      "note": "",
+      "updated": "2026-11-20T12:13:46Z"
+    },
+    {
+      "id": "pose-study-nova-mature-v1",
+      "kind": "pose-study",
+      "title": "Нова — сидячая поза с разведенными коленями",
+      "status": "draft",
+      "hash": "sha256:cf78d1b49e84d67ed478c80005968a57",
+      "approved_hash": null,
+      "data": {
+        "heroine": "nova",
+        "reference": "assets/sprite/m_nova.webp",
+        "image": "assets/concept/pose-studies/nova_mature.webp",
+        "pose": "Mature-этюд: сидя на полу с опорой на руку, колени разведены в широкую V-позу, каблуки расставлены. Чёрный комплект белья полностью виден.",
+        "review_note": "Проверить опорную кисть и сохранить тёплый загар и длинные медовые волосы при следующем рендере."
+      },
+      "note": "",
+      "updated": "2026-11-20T12:13:46Z"
     }
   ]
 }

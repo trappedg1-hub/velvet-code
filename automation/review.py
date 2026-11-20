@@ -6,6 +6,7 @@ review.py — рендер листа на утверждение (review/canon-
 """
 from __future__ import annotations
 
+import argparse
 import base64
 import json
 import pathlib
@@ -259,6 +260,49 @@ footer{margin-top:34px;color:var(--dim);font-size:12.5px;text-align:center}
 """
 
 
+POSE_CSS = """
+.pose-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px}
+.pose-grid .card{margin:0}
+.pose-art{display:block;width:100%;max-height:560px;object-fit:contain;background:
+  radial-gradient(ellipse at 50% 38%,#33263b,#15101b);border-radius:12px;border:1px solid var(--stroke)}
+"""
+
+
+def _pose_study(item: dict) -> str:
+    data = item["data"]
+    alt = _esc(item["title"]).replace('"', "&quot;")
+    image = ROOT / data["image"]
+    if image.is_file():
+        uri = base64.b64encode(image.read_bytes()).decode("ascii")
+        art = f'<img class="pose-art" src="data:image/webp;base64,{uri}" alt="{alt}">'
+    else:
+        art = '<p class="noimg">Файл кадра не найден.</p>'
+    return f"{art}<p>{_esc(data['pose'])}</p><p class='lede'>{_esc(data['review_note'])}</p>"
+
+
+def render_pose_studies() -> pathlib.Path:
+    reg = json.loads((ROOT / "canon" / "canon.json").read_text(encoding="utf-8"))
+    cards = []
+    for item in reg["items"]:
+        if item["kind"] != "pose-study":
+            continue
+        emblem, color = MARK[item["status"]]
+        cards.append(f"""<article class="card">
+          <span class="badge" style="color:{color}">{emblem} {item['status']}</span>
+          <h2>{_esc(item['title'])}</h2>{_pose_study(item)}
+          <p class="id">{_esc(item['id'])}</p>
+        </article>""")
+    dst = OUT.with_name("pose-studies-v1.html")
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    dst.write_text(f"""<!doctype html><html lang="ru"><head><meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>VELVET CODE · Этюды поз</title><style>{CSS}{POSE_CSS}</style></head>
+      <body><main class="wrap"><h1>VELVET CODE <span>· Этюды поз</span></h1>
+      <p class="lede">Пробные кадры по утверждённому касту v11. Позы показаны отдельно, в масштабе листа, не игры.</p>
+      <div class="pose-grid">{''.join(cards)}</div></main></body></html>""", encoding="utf-8")
+    return dst
+
+
 def render() -> pathlib.Path:
     reg = json.loads((ROOT / "canon" / "canon.json").read_text(encoding="utf-8"))
     chars = [json.loads(p.read_text(encoding="utf-8"))
@@ -273,7 +317,11 @@ def render() -> pathlib.Path:
         icon, color = MARK.get(item["status"], ("?", "#fff"))
         data = item["data"]
         inner = ""
-        if item["id"] == "body-taxonomy":
+        rating = ''
+        if item["kind"] == "pose-study":
+            inner = _pose_study(item)
+            rating = ' data-rating="mature"'
+        elif item["id"] == "body-taxonomy":
             inner = _taxonomy(data)
         elif item["id"] == "temperament-matrix":
             inner = _temperament(data)
@@ -295,7 +343,7 @@ def render() -> pathlib.Path:
                     inner = (f"<div class='row'><div class='k'>дельта v4 → v5 (без плюс-сайз, gyaru, темпераменты)</div>"
                              f"<div class='v'><img class='delta' src='{delta}' alt='delta'></div></div>") + inner
         blocks.append(f"""
-    <section class="card">
+    <section class="card"{rating}>
       <div class="chead">
         <span class="badge" style="color:{color};border-color:{color}66">{icon} {item['status']}</span>
         <h2>{_esc(item['title'])}</h2>
@@ -344,7 +392,7 @@ def render() -> pathlib.Path:
 <html lang="ru"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>VELVET CODE · Canon v11 на утверждение</title>
-<style>{CSS}{MODE_CSS}</style></head><body><div class="wrap">
+<style>{CSS}{MODE_CSS}{POSE_CSS}</style></head><body><div class="wrap">
   <h1>Canon <span>v11</span> — на утверждение</h1>
   <div class="modebar">
     <span class="lbl">режим</span>
@@ -624,4 +672,7 @@ def render() -> pathlib.Path:
 
 
 if __name__ == "__main__":
-    print(render())
+    parser = argparse.ArgumentParser(description="Собрать самодостаточный лист на утверждение")
+    parser.add_argument("--pose-studies", action="store_true", help="только лист этюдов поз")
+    args = parser.parse_args()
+    print(render_pose_studies() if args.pose_studies else render())

@@ -1,0 +1,65 @@
+{
+  "pack": "pose-studies-v1",
+  "items": [
+    {
+      "id": "pose-study-selena-v1",
+      "kind": "pose-study",
+      "title": "Селена — жест у оправы",
+      "data": {
+        "heroine": "selena",
+        "reference": "assets/sprite/m_selena.webp",
+        "image": "assets/concept/pose-studies/selena.webp",
+        "pose": "Опора на одну ногу, вторая согнута и перекрещена. Одна рука у оправы, другая на бедре; взгляд прямо на зрителя.",
+        "review_note": "Сверить баланс на опорной ноге и читаемость ремешков на поднятой туфле."
+      }
+    },
+    {
+      "id": "pose-study-nova-v1",
+      "kind": "pose-study",
+      "title": "Нова — разворот с прядью",
+      "data": {
+        "heroine": "nova",
+        "reference": "assets/sprite/m_nova.webp",
+        "image": "assets/concept/pose-studies/nova.webp",
+        "pose": "Плечи и бёдра развёрнуты в разные стороны. Поднятая рука держит прядь; улыбка через плечо.",
+        "review_note": "Проверить кисть у пояса и сохранить тёплый загар при следующем рендере."
+      }
+    },
+    {
+      "id": "pose-study-reika-v1",
+      "kind": "pose-study",
+      "title": "Рэйка — взгляд через плечо",
+      "data": {
+        "heroine": "reika",
+        "reference": "assets/sprite/m_reika.webp",
+        "image": "assets/concept/pose-studies/reika.webp",
+        "pose": "Боковой шаг, рука у лица, другая на талии. Голова повёрнута к зрителю.",
+        "review_note": "В черновике жест ближе к подбородку, чем к серьге, а ботильоны без ремешка. Перед игровым рендером сверить с референсом."
+      }
+    },
+    {
+      "id": "pose-study-selena-mature-v1",
+      "kind": "pose-study",
+      "title": "Селена — широкая стойка в белье",
+      "data": {
+        "heroine": "selena",
+        "reference": "assets/sprite/m_selena.webp",
+        "image": "assets/concept/pose-studies/selena_mature.webp",
+        "pose": "Mature-этюд: широкая стойка с разведенными ногами, одна рука у оправы, другая на бедре. Чёрный комплект белья, чулки и туфли полностью видны.",
+        "review_note": "Проверить, что комплект читается как белье, а не как костюм; сверить очки и прическу с каноном v11."
+      }
+    },
+    {
+      "id": "pose-study-nova-mature-v1",
+      "kind": "pose-study",
+      "title": "Нова — сидячая поза с разведенными коленями",
+      "data": {
+        "heroine": "nova",
+        "reference": "assets/sprite/m_nova.webp",
+        "image": "assets/concept/pose-studies/nova_mature.webp",
+        "pose": "Mature-этюд: сидя на полу с опорой на руку, колени разведены в широкую V-позу, каблуки расставлены. Чёрный комплект белья полностью виден.",
+        "review_note": "Проверить опорную кисть и сохранить тёплый загар и длинные медовые волосы при следующем рендере."
+      }
+    }
+  ]
+}
